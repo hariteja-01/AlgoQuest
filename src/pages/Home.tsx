@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Crown, FileText, TreePine, Play, BookOpen, Zap, ArrowRight, Target } from 'lucide-react';
+import { Crown, FileText, TreePine, Play, BookOpen, Zap, ArrowRight, Target, Code2, Sparkles, Rocket } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { ContainerScroll } from '../components/ContainerScroll';
+import { AlgorithmDashboard } from '../components/AlgorithmDashboard';
 
 const Home: React.FC = () => {
   const { theme } = useApp();
@@ -34,157 +36,158 @@ const Home: React.FC = () => {
     }
   ];
 
-  const algorithmComparison = [
-    {
-      algorithm: 'N-Queens',
-      complexity: 'O(N!)',
-      spaceComplexity: 'O(N)',
-      difficulty: 'Hard',
-      applications: 'Constraint Satisfaction'
-    },
-    {
-      algorithm: 'LCS',
-      complexity: 'O(m×n)',
-      spaceComplexity: 'O(min(m,n))',
-      difficulty: 'Medium',
-      applications: 'Text Comparison'
-    },
-    {
-      algorithm: 'Trie',
-      complexity: 'O(m)',
-      spaceComplexity: 'O(ALPHABET_SIZE×N×M)',
-      difficulty: 'Medium',
-      applications: 'Auto-Complete'
-    }
-  ];
-
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative px-4 sm:px-6 lg:px-8 pt-20 pb-16 overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-10 w-64 h-64 bg-blue-500 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute top-40 right-20 w-48 h-48 bg-purple-500 rounded-full blur-3xl animate-pulse delay-1000"></div>
-          <div className="absolute bottom-20 left-1/2 w-56 h-56 bg-green-500 rounded-full blur-3xl animate-pulse delay-2000"></div>
-        </div>
+      {/* Hero Scroll Section */}
+      <div className="flex flex-col overflow-hidden px-4 lg:px-8 -mt-12">
+        <ContainerScroll
+          titleComponent={
+            <div className="space-y-6 mb-16">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                className="space-y-4"
+              >
+                <div className="flex items-center justify-center mb-3">
+                  <h1 className={`text-4xl md:text-7xl font-bold ${
+                    theme === 'dark' ? 'text-white' : 'text-gray-900'
+                  }`}>
+                    AlgoQuest
+                  </h1>
+                </div>
 
-        <div className="max-w-7xl mx-auto text-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h1 className={`text-5xl md:text-7xl font-bold mb-6 ${
-              theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
-            }`}>
-              Learn DSA by{' '}
-              <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-green-600 bg-clip-text text-transparent">
-                Playing
-              </span>
-            </h1>
-            
-            <p className={`text-xl md:text-2xl mb-12 max-w-4xl mx-auto leading-relaxed ${
-              theme === 'dark' ? 'text-slate-200' : 'text-slate-600'
-            }`}>
-              Master complex algorithms through interactive visualizations. 
-              See how N-Queens, LCS, and Trie work with beautiful animations and real-time code generation.
-            </p>
+                <h2 className={`text-3xl md:text-6xl font-bold leading-tight ${
+                  theme === 'dark' ? 'text-white' : 'text-gray-900'
+                }`}>
+                  Master{' '}
+                  <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                    Algorithms
+                  </span>
+                  {' '}through{' '}
+                  <span className="bg-gradient-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent">
+                    Interactive
+                  </span>
+                  {' '}Learning
+                </h2>
 
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-              <Link to="/nqueens">
-                <motion.button
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl font-semibold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center space-x-2"
-                >
-                  <Play className="h-5 w-5" />
-                  <span>Start Learning</span>
-                </motion.button>
-              </Link>
-              
-              <a href="https://github.com/hariteja-01/AlgoQuest" target="_blank" rel="noopener noreferrer">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.98 }}
-                  className={`px-8 py-4 rounded-2xl font-semibold text-lg border-2 transition-all duration-300 ${
-                    theme === 'dark'
-                      ? 'border-slate-600 text-slate-300 hover:border-slate-500 hover:bg-slate-800'
-                      : 'border-slate-300 text-slate-700 hover:border-slate-400 hover:bg-slate-50'
-                  }`}
-                >
-                  <BookOpen className="h-5 w-5 inline-block mr-2" />
-                  View Docs
-                </motion.button>
-              </a>
+                <p className={`text-lg md:text-xl max-w-4xl mx-auto leading-relaxed ${
+                  theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                }`}>
+                  Dive deep into N-Queens, LCS, and Trie algorithms with stunning 3D visualizations, 
+                  real-time code generation, and immersive learning experiences that make complex concepts crystal clear.
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-2">
+                  <Link to="/nqueens">
+                    <motion.button
+                      whileHover={{ scale: 1.05, y: -2 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="group px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl font-semibold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center space-x-2"
+                    >
+                      <Rocket className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                      <span>Start Learning</span>
+                      <Sparkles className="h-4 w-4 group-hover:rotate-12 transition-transform" />
+                    </motion.button>
+                  </Link>
+                  
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.98 }}
+                    className={`px-8 py-4 rounded-2xl font-semibold text-lg border-2 transition-all duration-300 backdrop-blur-sm ${
+                      theme === 'dark'
+                        ? 'border-gray-600 text-gray-300 hover:border-gray-500 hover:bg-gray-800/50'
+                        : 'border-gray-300 text-gray-700 hover:border-gray-400 hover:bg-white/50'
+                    }`}
+                  >
+                    <BookOpen className="h-5 w-5 inline-block mr-2" />
+                    Explore Algorithms
+                  </motion.button>
+                </div>
+              </motion.div>
             </div>
-          </motion.div>
-        </div>
-      </section>
+          }
+        >
+          <AlgorithmDashboard />
+        </ContainerScroll>
+      </div>
 
       {/* Features Section */}
-      <section className="px-4 sm:px-6 lg:px-8 py-12">
-        <div className="max-w-7xl mx-auto">
+      <section className="px-4 sm:px-6 lg:px-12 py-12">
+        <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className={`text-4xl md:text-5xl font-bold mb-6 ${
-              theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
+            <h2 className={`text-4xl md:text-6xl font-bold mb-4 ${
+              theme === 'dark' ? 'text-white' : 'text-gray-900'
             }`}>
-              Interactive Algorithm Playground
+              Interactive Algorithm{' '}
+              <span className="bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+                Playground
+              </span>
             </h2>
             <p className={`text-xl max-w-3xl mx-auto ${
-              theme === 'dark' ? 'text-slate-200' : 'text-slate-600'
+              theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
             }`}>
               Dive deep into three fundamental algorithms with stunning visualizations, 
               real-time code generation, and comprehensive learning tools.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-6">
             {features.map((feature, index) => (
               <motion.div
                 key={feature.title}
                 initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
                 transition={{ delay: index * 0.2 }}
-                whileHover={{ y: -8 }}
-                className={`group relative p-8 rounded-3xl backdrop-blur-sm transition-all duration-500 ${
+                whileHover={{ y: -12, scale: 1.02 }}
+                className={`group relative p-6 rounded-3xl backdrop-blur-sm transition-all duration-500 ${
                   theme === 'dark'
-                    ? 'bg-slate-800/60 border border-slate-700/50 hover:bg-slate-800/80'
-                    : 'bg-white/80 border border-slate-200/50 hover:bg-white'
+                    ? 'bg-gray-800/60 border border-gray-700/50 hover:bg-gray-800/80'
+                    : 'bg-white/80 border border-gray-200/50 hover:bg-white'
                 } shadow-xl hover:shadow-2xl`}
               >
                 <div className="relative z-10">
-                  <div className={`inline-flex p-4 rounded-2xl bg-gradient-to-br ${feature.color} mb-6 shadow-lg`}>
-                    <feature.icon className="h-8 w-8 text-white" />
+                  <div className={`inline-flex p-3 rounded-2xl bg-gradient-to-br ${feature.color} mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                    <feature.icon className="h-6 w-6 text-white" />
                   </div>
                   
-                  <h3 className={`text-2xl font-bold mb-4 ${
-                    theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
+                  <h3 className={`text-xl font-bold mb-3 ${
+                    theme === 'dark' ? 'text-white' : 'text-gray-900'
                   }`}>
                     {feature.title}
                   </h3>
                   
-                  <p className={`text-lg mb-6 leading-relaxed ${
-                    theme === 'dark' ? 'text-slate-200' : 'text-slate-600'
+                  <p className={`text-base mb-4 leading-relaxed ${
+                    theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
                   }`}>
                     {feature.description}
                   </p>
 
-                  <div className="space-y-3 mb-8">
+                  <div className="space-y-2 mb-6">
                     {feature.features.map((item, idx) => (
-                      <div key={idx} className="flex items-center space-x-3">
+                      <motion.div 
+                        key={idx} 
+                        className="flex items-center space-x-3"
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: index * 0.2 + idx * 0.1 }}
+                      >
                         <Zap className={`h-4 w-4 ${
                           theme === 'dark' ? 'text-green-400' : 'text-green-500'
                         }`} />
                         <span className={`text-sm ${
-                          theme === 'dark' ? 'text-slate-200' : 'text-slate-600'
+                          theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
                         }`}>
                           {item}
                         </span>
-                      </div>
+                      </motion.div>
                     ))}
                   </div>
 
@@ -194,8 +197,8 @@ const Home: React.FC = () => {
                       whileTap={{ scale: 0.98 }}
                       className={`w-full px-6 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center space-x-2 ${
                         theme === 'dark'
-                          ? 'bg-slate-700 text-slate-200 hover:bg-slate-600 border border-slate-600'
-                          : 'bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-200'
+                          ? 'bg-gray-700 text-gray-200 hover:bg-gray-600 border border-gray-600'
+                          : 'bg-gray-100 text-gray-800 hover:bg-gray-200 border border-gray-200'
                       }`}
                     >
                       <span>Explore {feature.title}</span>
@@ -212,128 +215,28 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Algorithm Comparison */}
-      <section className="px-4 sm:px-6 lg:px-8 py-12">
-        <div className="max-w-7xl mx-auto">
+      {/* How It Works */}
+      <section className="px-4 sm:px-6 lg:px-12 py-12">
+        <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className={`text-4xl font-bold mb-6 ${
-              theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
+            <h2 className={`text-4xl md:text-5xl font-bold mb-4 ${
+              theme === 'dark' ? 'text-white' : 'text-gray-900'
             }`}>
-              Algorithm Comparison
+              How It{' '}
+              <span className="bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">
+                Works
+              </span>
             </h2>
             <p className={`text-xl max-w-2xl mx-auto ${
-              theme === 'dark' ? 'text-slate-200' : 'text-slate-600'
+              theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
             }`}>
-              Quick overview of the algorithms you'll master
+              Three simple steps to master complex algorithms
             </p>
-          </motion.div>
-
-          <div className={`overflow-hidden rounded-2xl backdrop-blur-sm ${
-            theme === 'dark'
-              ? 'bg-slate-800/60 border border-slate-700/50'
-              : 'bg-white/80 border border-slate-200/50'
-          } shadow-xl`}>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className={`${
-                    theme === 'dark' ? 'bg-slate-700/50' : 'bg-slate-50'
-                  }`}>
-                    <th className={`px-6 py-4 text-left font-semibold ${
-                      theme === 'dark' ? 'text-slate-200' : 'text-slate-800'
-                    }`}>
-                      Algorithm
-                    </th>
-                    <th className={`px-6 py-4 text-left font-semibold ${
-                      theme === 'dark' ? 'text-slate-200' : 'text-slate-800'
-                    }`}>
-                      Time Complexity
-                    </th>
-                    <th className={`px-6 py-4 text-left font-semibold ${
-                      theme === 'dark' ? 'text-slate-200' : 'text-slate-800'
-                    }`}>
-                      Space Complexity
-                    </th>
-                    <th className={`px-6 py-4 text-left font-semibold ${
-                      theme === 'dark' ? 'text-slate-200' : 'text-slate-800'
-                    }`}>
-                      Difficulty
-                    </th>
-                    <th className={`px-6 py-4 text-left font-semibold ${
-                      theme === 'dark' ? 'text-slate-200' : 'text-slate-800'
-                    }`}>
-                      Applications
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {algorithmComparison.map((alg, index) => (
-                    <motion.tr
-                      key={alg.algorithm}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      className={`border-t transition-colors duration-200 ${
-                        theme === 'dark' 
-                          ? 'border-slate-700 hover:bg-slate-700/30' 
-                          : 'border-slate-200 hover:bg-slate-50'
-                      }`}
-                    >
-                      <td className={`px-6 py-4 font-medium ${
-                        theme === 'dark' ? 'text-slate-100' : 'text-slate-800'
-                      }`}>
-                        {alg.algorithm}
-                      </td>
-                      <td className={`px-6 py-4 font-mono text-sm ${
-                        theme === 'dark' ? 'text-blue-300' : 'text-blue-600'
-                      }`}>
-                        {alg.complexity}
-                      </td>
-                      <td className={`px-6 py-4 font-mono text-sm ${
-                        theme === 'dark' ? 'text-green-300' : 'text-green-600'
-                      }`}>
-                        {alg.spaceComplexity}
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                          alg.difficulty === 'Hard'
-                            ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
-                            : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300'
-                        }`}>
-                          {alg.difficulty}
-                        </span>
-                      </td>
-                      <td className={`px-6 py-4 ${
-                        theme === 'dark' ? 'text-slate-200' : 'text-slate-600'
-                      }`}>
-                        {alg.applications}
-                      </td>
-                    </motion.tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section className="px-4 sm:px-6 lg:px-8 py-12">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-12"
-          >
-            <h2 className={`text-4xl font-bold mb-6 ${
-              theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
-            }`}>
-              How It Works
-            </h2>
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -342,41 +245,59 @@ const Home: React.FC = () => {
                 step: '01',
                 title: 'Choose Algorithm',
                 description: 'Pick from N-Queens, LCS, or Trie algorithms to start your learning journey.',
-                icon: Target
+                icon: Target,
+                color: 'from-purple-500 to-pink-500'
               },
               {
                 step: '02',
                 title: 'Interactive Learning',
                 description: 'Watch algorithms come to life with beautiful animations and step-by-step execution.',
-                icon: Play
+                icon: Play,
+                color: 'from-blue-500 to-cyan-500'
               },
               {
                 step: '03',
                 title: 'Code Generation',
                 description: 'See real-time code generation in C++, Python, and JavaScript as you learn.',
-                icon: BookOpen
+                icon: Code2,
+                color: 'from-green-500 to-emerald-500'
               }
             ].map((item, index) => (
               <motion.div
                 key={item.title}
                 initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
                 transition={{ delay: index * 0.2 }}
-                className="text-center"
+                className="text-center group"
               >
-                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-6 bg-gradient-to-br from-blue-500 to-purple-500 text-white font-bold text-xl shadow-lg`}>
-                  {item.step}
-                </div>
-                <item.icon className={`h-8 w-8 mx-auto mb-4 ${
-                  theme === 'dark' ? 'text-blue-400' : 'text-blue-600'
-                }`} />
-                <h3 className={`text-xl font-bold mb-4 ${
-                  theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
+                <motion.div 
+                  className="relative mb-6"
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-3 bg-gradient-to-br ${item.color} text-white font-bold text-xl shadow-2xl group-hover:shadow-3xl transition-all duration-300`}>
+                    {item.step}
+                  </div>
+                  <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                </motion.div>
+                
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  className="mb-4"
+                >
+                  <item.icon className={`h-8 w-8 mx-auto mb-3 ${
+                    theme === 'dark' ? 'text-blue-400' : 'text-blue-600'
+                  } group-hover:scale-110 transition-transform duration-300`} />
+                </motion.div>
+                
+                <h3 className={`text-xl font-bold mb-3 ${
+                  theme === 'dark' ? 'text-white' : 'text-gray-900'
                 }`}>
                   {item.title}
                 </h3>
-                <p className={`${
-                  theme === 'dark' ? 'text-slate-200' : 'text-slate-600'
+                <p className={`text-base leading-relaxed ${
+                  theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
                 }`}>
                   {item.description}
                 </p>
@@ -387,36 +308,69 @@ const Home: React.FC = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="px-4 sm:px-6 lg:px-8 py-16">
+      <section className="px-4 sm:px-6 lg:px-12 py-12">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            className={`p-12 rounded-3xl backdrop-blur-sm ${
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            whileHover={{ scale: 1.02 }}
+            className={`p-8 rounded-3xl backdrop-blur-sm ${
               theme === 'dark'
-                ? 'bg-gradient-to-r from-slate-800/60 to-slate-700/60 border border-slate-600/50'
-                : 'bg-gradient-to-r from-white/80 to-slate-50/80 border border-slate-200/50'
-            } shadow-2xl`}
+                ? 'bg-gradient-to-r from-gray-800/60 to-gray-700/60 border border-gray-600/50'
+                : 'bg-gradient-to-r from-white/80 to-gray-50/80 border border-gray-200/50'
+            } shadow-2xl relative overflow-hidden`}
           >
-            <h2 className={`text-4xl md:text-5xl font-bold mb-6 ${
-              theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
-            }`}>
-              Ready to Master DSA?
-            </h2>
-            <p className={`text-xl mb-8 ${
-              theme === 'dark' ? 'text-slate-200' : 'text-slate-600'
-            }`}>
-              Join thousands of developers who have mastered algorithms through interactive learning.
-            </p>
-            <Link to="/nqueens">
-              <motion.button
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                className="px-12 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl font-bold text-xl shadow-xl hover:shadow-2xl transition-all duration-300"
+            {/* Animated background elements */}
+            <div className="absolute inset-0 opacity-10">
+              <div className="absolute top-0 left-0 w-32 h-32 bg-blue-500 rounded-full blur-3xl animate-pulse"></div>
+              <div className="absolute bottom-0 right-0 w-40 h-40 bg-purple-500 rounded-full blur-3xl animate-pulse delay-1000"></div>
+            </div>
+            
+            <div className="relative z-10">
+              <motion.h2 
+                className={`text-4xl md:text-5xl font-bold mb-4 ${
+                  theme === 'dark' ? 'text-white' : 'text-gray-900'
+                }`}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
               >
-                Start Your Journey
-              </motion.button>
-            </Link>
+                Ready to{' '}
+                <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                  Master
+                </span>{' '}
+                DSA?
+              </motion.h2>
+              
+              <motion.p 
+                className={`text-lg mb-6 ${
+                  theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                }`}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+              >
+                Join thousands of developers who have mastered algorithms through interactive learning.
+              </motion.p>
+              
+              <Link to="/nqueens">
+                <motion.button
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.4 }}
+                  className="group px-10 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center space-x-3 mx-auto"
+                >
+                  <Rocket className="h-6 w-6 group-hover:translate-x-1 transition-transform" />
+                  <span>Start Your Journey</span>
+                  <Sparkles className="h-5 w-5 group-hover:rotate-12 transition-transform" />
+                </motion.button>
+              </Link>
+            </div>
           </motion.div>
         </div>
       </section>

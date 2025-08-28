@@ -54,6 +54,8 @@ export class LCSEngine {
     dpTable: number[][][];
     lcs: string;
     dependencies: Array<{from: number[], to: number[], value: number}>;
+    dimensions: number[];
+    steps: Array<{coords: number[], value: number, type: 'match' | 'inherit', sources?: number[][]}>;
   } {
     if (strings.length < 2) throw new Error('Need at least 2 strings');
     if (strings.length === 2) {
@@ -61,20 +63,21 @@ export class LCSEngine {
       return {
         dpTable: [result.dpTable],
         lcs: result.lcs,
-        dependencies: []
+        dependencies: [],
+        dimensions: [strings[0].length + 1, strings[1].length + 1],
+        steps: this.generate2DSteps(strings[0], strings[1], result.dpTable)
       };
     }
 
     const n = strings.length;
-    const lengths = strings.map(s => s.length);
-    const totalSize = lengths.reduce((acc, len) => acc * (len + 1), 1);
+    const dimensions = strings.map(s => s.length + 1);
     
     // For visualization, we'll use a simplified 3D approach
     if (n === 3) {
       return this.solve3D(strings[0], strings[1], strings[2]);
     }
 
-    // For 4+ strings, use rolling optimization
+    // For 4+ strings, use progressive pairing with full tracking
     return this.solveND(strings);
   }
 
@@ -82,6 +85,8 @@ export class LCSEngine {
     dpTable: number[][][];
     lcs: string;
     dependencies: Array<{from: number[], to: number[], value: number}>;
+    dimensions: number[];
+    steps: Array<{coords: number[], value: number, type: 'match' | 'inherit', sources?: number[][]}>;
   } {
     const l1 = str1.length, l2 = str2.length, l3 = str3.length;
     const dp: number[][][] = Array(l1 + 1).fill(null).map(() =>
@@ -91,53 +96,127 @@ export class LCSEngine {
     );
 
     const dependencies: Array<{from: number[], to: number[], value: number}> = [];
+    const steps: Array<{coords: number[], value: number, type: 'match' | 'inherit', sources?: number[][]}> = [];
 
-    for (let i = 1; i <= l1; i++) {
-      for (let j = 1; j <= l2; j++) {
-        for (let k = 1; k <= l3; k++) {
-          if (str1[i - 1] === str2[j - 1] && str2[j - 1] === str3[k - 1]) {
+    for (let i = 0; i <= l1; i++) {
+      for (let j = 0; j <= l2; j++) {
+        for (let k = 0; k <= l3; k++) {
+          if (i === 0 || j === 0 || k === 0) {
+            dp[i][j][k] = 0;
+            steps.push({
+              coords: [i, j, k],
+              value: 0,
+              type: 'inherit'
+            });
+          } else if (str1[i - 1] === str2[j - 1] && str2[j - 1] === str3[k - 1]) {
             dp[i][j][k] = dp[i - 1][j - 1][k - 1] + 1;
             dependencies.push({
               from: [i - 1, j - 1, k - 1],
               to: [i, j, k],
               value: dp[i][j][k]
             });
+            steps.push({
+              coords: [i, j, k],
+              value: dp[i][j][k],
+              type: 'match',
+              sources: [[i - 1, j - 1, k - 1]]
+            });
           } else {
             const candidates = [
-              dp[i - 1][j][k],
-              dp[i][j - 1][k],
-              dp[i][j][k - 1]
+              { val: dp[i - 1][j][k], coords: [i - 1, j, k] },
+              { val: dp[i][j - 1][k], coords: [i, j - 1, k] },
+              { val: dp[i][j][k - 1], coords: [i, j, k - 1] }
             ];
-            dp[i][j][k] = Math.max(...candidates);
+            const maxCandidate = candidates.reduce((a, b) => a.val >= b.val ? a : b);
+            dp[i][j][k] = maxCandidate.val;
+            steps.push({
+              coords: [i, j, k],
+              value: dp[i][j][k],
+              type: 'inherit',
+              sources: [maxCandidate.coords]
+            });
           }
         }
       }
     }
 
     const lcs = this.reconstructLCS3D(str1, str2, str3, dp);
-    return { dpTable: [dp], lcs, dependencies };
+    return { 
+      dpTable: [dp], 
+      lcs, 
+      dependencies,
+      dimensions: [l1 + 1, l2 + 1, l3 + 1],
+      steps
+    };
   }
 
   private solveND(strings: string[]): {
     dpTable: number[][][];
     lcs: string;
     dependencies: Array<{from: number[], to: number[], value: number}>;
+    dimensions: number[];
+    steps: Array<{coords: number[], value: number, type: 'match' | 'inherit', sources?: number[][]}>;
   } {
-    // Simplified N-dimensional LCS using pairwise approach
+    // Progressive pairwise approach for 4+ strings
     let current = strings[0];
-    const tables: number[][][] = [];
+    const tables: number[][][][] = [];
+    const allSteps: Array<{coords: number[], value: number, type: 'match' | 'inherit', sources?: number[][]}> = [];
     
     for (let i = 1; i < strings.length; i++) {
       const result = this.solveTwoStrings(current, strings[i]);
-      tables.push([result.dpTable]);
+      // Convert 2D table to 3D format for consistency
+      const table3D: number[][][] = [result.dpTable];
+      tables.push(table3D);
+      
+      // Generate steps for this pair
+      const pairSteps = this.generate2DSteps(current, strings[i], result.dpTable);
+      allSteps.push(...pairSteps);
+      
       current = result.lcs;
     }
 
     return {
       dpTable: tables.flat(),
       lcs: current,
-      dependencies: []
+      dependencies: [],
+      dimensions: strings.map(s => s.length + 1),
+      steps: allSteps
     };
+  }
+
+  private generate2DSteps(str1: string, str2: string, dpTable: number[][]): Array<{coords: number[], value: number, type: 'match' | 'inherit', sources?: number[][]}> {
+    const steps: Array<{coords: number[], value: number, type: 'match' | 'inherit', sources?: number[][]}> = [];
+    
+    for (let i = 0; i <= str1.length; i++) {
+      for (let j = 0; j <= str2.length; j++) {
+        if (i === 0 || j === 0) {
+          steps.push({
+            coords: [i, j],
+            value: 0,
+            type: 'inherit'
+          });
+        } else if (str1[i - 1] === str2[j - 1]) {
+          steps.push({
+            coords: [i, j],
+            value: dpTable[i][j],
+            type: 'match',
+            sources: [[i - 1, j - 1]]
+          });
+        } else {
+          const sources = dpTable[i - 1][j] >= dpTable[i][j - 1] 
+            ? [[i - 1, j]] 
+            : [[i, j - 1]];
+          steps.push({
+            coords: [i, j],
+            value: dpTable[i][j],
+            type: 'inherit',
+            sources
+          });
+        }
+      }
+    }
+    
+    return steps;
   }
 
   private reconstructLCS3D(str1: string, str2: string, str3: string, dp: number[][][]): string {

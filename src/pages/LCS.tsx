@@ -6,6 +6,7 @@ import { LCSEngine } from '../logic/lcs/engine';
 import { generateLCSCode } from '../logic/lcs/codegen';
 import CodeDisplay from '../components/CodeDisplay';
 import DPTableVisualizer from '../components/DPTableVisualizer';
+import MultiStringLCSVisualizer from '../components/MultiStringLCSVisualizer';
 
 const StringInputs = React.memo(({ strings, inputRefs, updateString, handleKeyDown, removeString, addString, isAnimating, theme }: {
   strings: string[];
@@ -88,14 +89,13 @@ const StringInputs = React.memo(({ strings, inputRefs, updateString, handleKeyDo
 const LCS: React.FC = () => {
   const { theme, language } = useApp();
   const [strings, setStrings] = useState(['', '']);
-  const [dpTable, setDpTable] = useState<number[][]>([[]]);
+  const [dpTable, setDpTable] = useState<number[][][] | number[][]>([]);
   const [currentStep, setCurrentStep] = useState<{row: number, col: number, char?: string}[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
   const [spaceOptimized, setSpaceOptimized] = useState(false);
   const [animationSpeed, setAnimationSpeed] = useState(500);
   const [lcsResult, setLcsResult] = useState<string>('');
   const [currentAnimationStep, setCurrentAnimationStep] = useState<number>(0);
-  const [currentSlice, setCurrentSlice] = useState(0);
   const engine = new LCSEngine(strings);
   const animationRef = useRef<number>(0);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -148,7 +148,7 @@ const LCS: React.FC = () => {
 
   const solveLCS = async () => {
     if (strings.length < 2 || strings.some(str => str.length === 0)) {
-      setDpTable([[]]);
+      setDpTable([]);
       setCurrentStep([]);
       return;
     }
@@ -181,6 +181,7 @@ const LCS: React.FC = () => {
 
       requestAnimationFrame(animateStep);
     } else {
+      // Multi-string LCS
       const result = engine.solveMultipleStrings(strings);
       setDpTable(result.dpTable);
       setLcsResult(result.lcs);
@@ -190,10 +191,20 @@ const LCS: React.FC = () => {
   };
 
   const reset = () => {
+    setStrings(['', '']);
     setDpTable([]);
     setLcsResult('');
     setCurrentStep([]);
+    setCurrentAnimationStep(0);
     setIsAnimating(false);
+    // Clear any ongoing animation
+    if (animationRef.current) {
+      animationRef.current = 0;
+    }
+    // Focus the first input after reset
+    setTimeout(() => {
+      inputRefs.current[0]?.focus();
+    }, 100);
   };
 
   const Controls: React.FC = () => (
@@ -288,7 +299,7 @@ const LCS: React.FC = () => {
           <p className={`text-lg ${
             theme === 'dark' ? 'text-slate-300' : 'text-slate-600'
           }`}>
-            Dynamic programming visualization for Longest Common Subsequence
+            Dynamic programming visualization for Longest Common Subsequence (2-4 strings)
           </p>
         </motion.div>
 
@@ -318,14 +329,23 @@ const LCS: React.FC = () => {
             animate={{ opacity: 1, scale: 1 }}
             className="lg:col-span-3"
           >
-            <DPTableVisualizer
-              dpTable={strings.length > 2 ? dpTable[currentSlice] : dpTable}
-              strings={strings}
-              currentStep={currentStep}
-              theme={theme}
-              setCurrentStep={setCurrentStep}
-              lcsResult={lcsResult}
-            />
+            {strings.length <= 2 ? (
+              <DPTableVisualizer
+                dpTable={dpTable as number[][]}
+                strings={strings}
+                currentStep={currentStep}
+                theme={theme}
+                setCurrentStep={setCurrentStep}
+                lcsResult={lcsResult}
+              />
+            ) : (
+              <MultiStringLCSVisualizer
+                dpTable={dpTable}
+                strings={strings}
+                theme={theme}
+                lcsResult={lcsResult}
+              />
+            )}
           </motion.div>
         </div>
 
