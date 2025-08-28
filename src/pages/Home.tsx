@@ -61,7 +61,7 @@ const Home: React.FC = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative px-4 sm:px-6 lg:px-8 pt-20 pb-32 overflow-hidden">
+      <section className="relative px-4 sm:px-6 lg:px-8 pt-20 pb-16 overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 left-10 w-64 h-64 bg-blue-500 rounded-full blur-3xl animate-pulse"></div>
           <div className="absolute top-40 right-20 w-48 h-48 bg-purple-500 rounded-full blur-3xl animate-pulse delay-1000"></div>
@@ -75,7 +75,7 @@ const Home: React.FC = () => {
             transition={{ duration: 0.8 }}
           >
             <h1 className={`text-5xl md:text-7xl font-bold mb-6 ${
-              theme === 'dark' ? 'text-white' : 'text-slate-900'
+              theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
             }`}>
               Learn DSA by{' '}
               <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-green-600 bg-clip-text text-transparent">
@@ -84,7 +84,7 @@ const Home: React.FC = () => {
             </h1>
             
             <p className={`text-xl md:text-2xl mb-12 max-w-4xl mx-auto leading-relaxed ${
-              theme === 'dark' ? 'text-slate-300' : 'text-slate-600'
+              theme === 'dark' ? 'text-slate-200' : 'text-slate-600'
             }`}>
               Master complex algorithms through interactive visualizations. 
               See how N-Queens, LCS, and Trie work with beautiful animations and real-time code generation.
@@ -102,38 +102,40 @@ const Home: React.FC = () => {
                 </motion.button>
               </Link>
               
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
-                className={`px-8 py-4 rounded-2xl font-semibold text-lg border-2 transition-all duration-300 ${
-                  theme === 'dark'
-                    ? 'border-slate-600 text-slate-300 hover:border-slate-500 hover:bg-slate-800'
-                    : 'border-slate-300 text-slate-700 hover:border-slate-400 hover:bg-slate-50'
-                }`}
-              >
-                <BookOpen className="h-5 w-5 inline-block mr-2" />
-                View Docs
-              </motion.button>
+              <a href="https://github.com/hariteja-01/AlgoQuest" target="_blank" rel="noopener noreferrer">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`px-8 py-4 rounded-2xl font-semibold text-lg border-2 transition-all duration-300 ${
+                    theme === 'dark'
+                      ? 'border-slate-600 text-slate-300 hover:border-slate-500 hover:bg-slate-800'
+                      : 'border-slate-300 text-slate-700 hover:border-slate-400 hover:bg-slate-50'
+                  }`}
+                >
+                  <BookOpen className="h-5 w-5 inline-block mr-2" />
+                  View Docs
+                </motion.button>
+              </a>
             </div>
           </motion.div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="px-4 sm:px-6 lg:px-8 py-20">
+      <section className="px-4 sm:px-6 lg:px-8 py-12">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-16"
+            className="text-center mb-12"
           >
             <h2 className={`text-4xl md:text-5xl font-bold mb-6 ${
-              theme === 'dark' ? 'text-white' : 'text-slate-900'
+              theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
             }`}>
               Interactive Algorithm Playground
             </h2>
             <p className={`text-xl max-w-3xl mx-auto ${
-              theme === 'dark' ? 'text-slate-300' : 'text-slate-600'
+              theme === 'dark' ? 'text-slate-200' : 'text-slate-600'
             }`}>
               Dive deep into three fundamental algorithms with stunning visualizations, 
               real-time code generation, and comprehensive learning tools.
@@ -160,13 +162,13 @@ const Home: React.FC = () => {
                   </div>
                   
                   <h3 className={`text-2xl font-bold mb-4 ${
-                    theme === 'dark' ? 'text-white' : 'text-slate-900'
+                    theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
                   }`}>
                     {feature.title}
                   </h3>
                   
                   <p className={`text-lg mb-6 leading-relaxed ${
-                    theme === 'dark' ? 'text-slate-300' : 'text-slate-600'
+                    theme === 'dark' ? 'text-slate-200' : 'text-slate-600'
                   }`}>
                     {feature.description}
                   </p>
@@ -178,7 +180,7 @@ const Home: React.FC = () => {
                           theme === 'dark' ? 'text-green-400' : 'text-green-500'
                         }`} />
                         <span className={`text-sm ${
-                          theme === 'dark' ? 'text-slate-400' : 'text-slate-600'
+                          theme === 'dark' ? 'text-slate-200' : 'text-slate-600'
                         }`}>
                           {item}
                         </span>
@@ -211,20 +213,20 @@ const Home: React.FC = () => {
       </section>
 
       {/* Algorithm Comparison */}
-      <section className="px-4 sm:px-6 lg:px-8 py-20">
+      <section className="px-4 sm:px-6 lg:px-8 py-12">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-16"
+            className="text-center mb-12"
           >
             <h2 className={`text-4xl font-bold mb-6 ${
-              theme === 'dark' ? 'text-white' : 'text-slate-900'
+              theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
             }`}>
               Algorithm Comparison
             </h2>
             <p className={`text-xl max-w-2xl mx-auto ${
-              theme === 'dark' ? 'text-slate-300' : 'text-slate-600'
+              theme === 'dark' ? 'text-slate-200' : 'text-slate-600'
             }`}>
               Quick overview of the algorithms you'll master
             </p>
@@ -282,17 +284,17 @@ const Home: React.FC = () => {
                       }`}
                     >
                       <td className={`px-6 py-4 font-medium ${
-                        theme === 'dark' ? 'text-slate-200' : 'text-slate-800'
+                        theme === 'dark' ? 'text-slate-100' : 'text-slate-800'
                       }`}>
                         {alg.algorithm}
                       </td>
                       <td className={`px-6 py-4 font-mono text-sm ${
-                        theme === 'dark' ? 'text-blue-400' : 'text-blue-600'
+                        theme === 'dark' ? 'text-blue-300' : 'text-blue-600'
                       }`}>
                         {alg.complexity}
                       </td>
                       <td className={`px-6 py-4 font-mono text-sm ${
-                        theme === 'dark' ? 'text-green-400' : 'text-green-600'
+                        theme === 'dark' ? 'text-green-300' : 'text-green-600'
                       }`}>
                         {alg.spaceComplexity}
                       </td>
@@ -306,7 +308,7 @@ const Home: React.FC = () => {
                         </span>
                       </td>
                       <td className={`px-6 py-4 ${
-                        theme === 'dark' ? 'text-slate-300' : 'text-slate-600'
+                        theme === 'dark' ? 'text-slate-200' : 'text-slate-600'
                       }`}>
                         {alg.applications}
                       </td>
@@ -320,15 +322,15 @@ const Home: React.FC = () => {
       </section>
 
       {/* How It Works */}
-      <section className="px-4 sm:px-6 lg:px-8 py-20">
+      <section className="px-4 sm:px-6 lg:px-8 py-12">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-16"
+            className="text-center mb-12"
           >
             <h2 className={`text-4xl font-bold mb-6 ${
-              theme === 'dark' ? 'text-white' : 'text-slate-900'
+              theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
             }`}>
               How It Works
             </h2>
@@ -369,12 +371,12 @@ const Home: React.FC = () => {
                   theme === 'dark' ? 'text-blue-400' : 'text-blue-600'
                 }`} />
                 <h3 className={`text-xl font-bold mb-4 ${
-                  theme === 'dark' ? 'text-white' : 'text-slate-900'
+                  theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
                 }`}>
                   {item.title}
                 </h3>
                 <p className={`${
-                  theme === 'dark' ? 'text-slate-300' : 'text-slate-600'
+                  theme === 'dark' ? 'text-slate-200' : 'text-slate-600'
                 }`}>
                   {item.description}
                 </p>
@@ -385,7 +387,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="px-4 sm:px-6 lg:px-8 py-32">
+      <section className="px-4 sm:px-6 lg:px-8 py-16">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -397,12 +399,12 @@ const Home: React.FC = () => {
             } shadow-2xl`}
           >
             <h2 className={`text-4xl md:text-5xl font-bold mb-6 ${
-              theme === 'dark' ? 'text-white' : 'text-slate-900'
+              theme === 'dark' ? 'text-slate-100' : 'text-slate-900'
             }`}>
               Ready to Master DSA?
             </h2>
             <p className={`text-xl mb-8 ${
-              theme === 'dark' ? 'text-slate-300' : 'text-slate-600'
+              theme === 'dark' ? 'text-slate-200' : 'text-slate-600'
             }`}>
               Join thousands of developers who have mastered algorithms through interactive learning.
             </p>

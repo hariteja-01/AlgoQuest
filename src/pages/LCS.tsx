@@ -17,19 +17,19 @@ const StringInputs = React.memo(({ strings, inputRefs, updateString, handleKeyDo
   isAnimating: boolean;
   theme: string;
 }) => (
-  <div className={`p-6 rounded-2xl backdrop-blur-sm ${
+  <div className={`p-4 rounded-2xl backdrop-blur-sm ${
     theme === 'dark' ? 'bg-slate-800/60' : 'bg-white/80'
   } shadow-lg border border-slate-200/20`}>
-    <h3 className={`text-lg font-semibold mb-4 flex items-center ${
+    <h3 className={`text-base font-semibold mb-3 flex items-center ${
       theme === 'dark' ? 'text-white' : 'text-slate-900'
     }`}>
-      <Settings className="h-5 w-5 mr-2" />
+      <Settings className="h-4 w-4 mr-2" />
       Input Strings ({strings.length})
     </h3>
-    <div className="space-y-4">
+    <div className="space-y-3">
       {strings.map((_, index) => (
-        <div key={index} className="flex items-center space-x-3">
-          <label className={`text-sm font-medium w-12 ${
+        <div key={index} className="flex items-center gap-2">
+          <label className={`text-xs font-medium w-8 flex-shrink-0 ${
             theme === 'dark' ? 'text-slate-300' : 'text-slate-700'
           }`}>
             S{index + 1}:
@@ -41,11 +41,11 @@ const StringInputs = React.memo(({ strings, inputRefs, updateString, handleKeyDo
             onKeyDown={e => handleKeyDown(index, e)}
             autoComplete="off"
             style={{ textTransform: 'uppercase' }}
-            className={`flex-1 px-3 py-2 rounded-lg border text-sm font-mono transition-all duration-200 ${
+            className={`flex-1 min-w-0 px-2 py-1.5 rounded-md border text-xs font-mono transition-all duration-200 ${
               theme === 'dark'
                 ? 'bg-slate-700 border-slate-600 text-slate-200 focus:border-blue-500'
                 : 'bg-white border-slate-300 text-slate-700 focus:border-blue-500'
-            } focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
+            } focus:outline-none focus:ring-1 focus:ring-blue-500/20`}
             placeholder={`String ${index + 1}`}
           />
           {strings.length > 2 && (
@@ -53,14 +53,14 @@ const StringInputs = React.memo(({ strings, inputRefs, updateString, handleKeyDo
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => removeString(index)}
-              className={`p-2 rounded-lg transition-all duration-200 ${
+              className={`p-1.5 rounded-md transition-all duration-200 flex-shrink-0 ${
                 theme === 'dark'
                   ? 'text-red-400 hover:bg-red-900/20'
                   : 'text-red-500 hover:bg-red-50'
               }`}
               disabled={isAnimating}
             >
-              <Minus className="h-4 w-4" />
+              <Minus className="h-3 w-3" />
             </motion.button>
           )}
         </div>
@@ -71,13 +71,13 @@ const StringInputs = React.memo(({ strings, inputRefs, updateString, handleKeyDo
           whileTap={{ scale: 0.98 }}
           onClick={addString}
           disabled={isAnimating}
-          className={`w-full px-4 py-2 rounded-lg border-2 border-dashed transition-all duration-200 flex items-center justify-center space-x-2 ${
+          className={`w-full px-3 py-2 rounded-md border-2 border-dashed transition-all duration-200 flex items-center justify-center space-x-2 text-xs ${
             theme === 'dark'
               ? 'border-slate-600 text-slate-400 hover:border-slate-500 hover:text-slate-300'
               : 'border-slate-300 text-slate-500 hover:border-slate-400 hover:text-slate-600'
           }`}
         >
-          <Plus className="h-4 w-4" />
+          <Plus className="h-3 w-3" />
           <span>Add String</span>
         </motion.button>
       )}
@@ -197,24 +197,24 @@ const LCS: React.FC = () => {
   };
 
   const Controls: React.FC = () => (
-    <div className={`p-6 rounded-2xl backdrop-blur-sm ${
+    <div className={`p-4 rounded-2xl backdrop-blur-sm ${
       theme === 'dark' ? 'bg-slate-800/60' : 'bg-white/80'
     } shadow-lg border border-slate-200/20`}>
-      <h3 className={`text-lg font-semibold mb-4 ${
+      <h3 className={`text-base font-semibold mb-3 ${
         theme === 'dark' ? 'text-white' : 'text-slate-900'
       }`}>
         Controls
       </h3>
       
-      <div className="space-y-4">
+      <div className="space-y-3">
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={solveLCS}
           disabled={isAnimating || strings.some(s => s.length === 0)}
-          className="w-full px-4 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl font-medium disabled:opacity-50 flex items-center justify-center space-x-2"
+          className="w-full px-3 py-2.5 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg font-medium disabled:opacity-50 flex items-center justify-center space-x-2 text-sm"
         >
-          {isAnimating ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+          {isAnimating ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
           <span>{isAnimating ? 'Computing...' : 'Solve LCS'}</span>
         </motion.button>
 
@@ -222,19 +222,19 @@ const LCS: React.FC = () => {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={reset}
-          className={`w-full px-4 py-3 rounded-xl font-medium border transition-all duration-200 flex items-center justify-center space-x-2 ${
+          className={`w-full px-3 py-2.5 rounded-lg font-medium border transition-all duration-200 flex items-center justify-center space-x-2 text-sm ${
             theme === 'dark'
               ? 'border-slate-600 text-slate-300 hover:bg-slate-700'
               : 'border-slate-300 text-slate-700 hover:bg-slate-50'
           }`}
         >
-          <RotateCcw className="h-4 w-4" />
+          <RotateCcw className="h-3.5 w-3.5" />
           <span>Reset</span>
         </motion.button>
 
-        <div className="space-y-3 pt-3 border-t border-slate-200/20">
+        <div className="space-y-2 pt-2 border-t border-slate-200/20">
           <div>
-            <label className={`block text-sm font-medium mb-2 ${
+            <label className={`block text-xs font-medium mb-1.5 ${
               theme === 'dark' ? 'text-slate-300' : 'text-slate-700'
             }`}>
               Animation Speed: {animationSpeed}ms
@@ -271,109 +271,8 @@ const LCS: React.FC = () => {
     </div>
   );
 
-  const ResultDisplay: React.FC = () => (
-    <AnimatePresence>
-      {lcsResult && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          className={`p-6 rounded-2xl backdrop-blur-sm ${
-            theme === 'dark' ? 'bg-slate-800/60' : 'bg-white/80'
-          } shadow-lg border border-slate-200/20`}
-        >
-          <h3 className={`text-lg font-semibold mb-4 flex items-center ${
-            theme === 'dark' ? 'text-white' : 'text-slate-900'
-          }`}>
-            <BarChart3 className="h-5 w-5 mr-2" />
-            Results
-          </h3>
-          
-          <div className="space-y-4">
-            <div>
-              <label className={`block text-sm font-medium mb-2 ${
-                theme === 'dark' ? 'text-slate-300' : 'text-slate-700'
-              }`}>
-                Longest Common Subsequence:
-              </label>
-              <div className={`p-3 rounded-lg font-mono text-lg text-center ${
-                theme === 'dark' ? 'bg-slate-700 text-green-400' : 'bg-green-50 text-green-700'
-              }`}>
-                {lcsResult || 'No common subsequence'}
-              </div>
-            </div>
-            
-            <div>
-              <label className={`block text-sm font-medium mb-2 ${
-                theme === 'dark' ? 'text-slate-300' : 'text-slate-700'
-              }`}>
-                Length: {lcsResult.length}
-              </label>
-            </div>
-            
-            {strings.length === 2 && (
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className={`block text-sm font-medium mb-2 ${
-                    theme === 'dark' ? 'text-slate-300' : 'text-slate-700'
-                  }`}>
-                    String 1: {strings[0]}
-                  </label>
-                  <div className="flex flex-wrap gap-1">
-                    {strings[0].split('').map((char, idx) => (
-                      <span
-                        key={idx}
-                        className={`px-2 py-1 rounded text-sm ${
-                          lcsResult.includes(char)
-                            ? theme === 'dark'
-                              ? 'bg-green-900/30 text-green-300 border border-green-700'
-                              : 'bg-green-100 text-green-700 border border-green-300'
-                            : theme === 'dark'
-                              ? 'bg-slate-700 text-slate-300'
-                              : 'bg-slate-100 text-slate-600'
-                        }`}
-                      >
-                        {char}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                
-                <div>
-                  <label className={`block text-sm font-medium mb-2 ${
-                    theme === 'dark' ? 'text-slate-300' : 'text-slate-700'
-                  }`}>
-                    String 2: {strings[1]}
-                  </label>
-                  <div className="flex flex-wrap gap-1">
-                    {strings[1].split('').map((char, idx) => (
-                      <span
-                        key={idx}
-                        className={`px-2 py-1 rounded text-sm ${
-                          lcsResult.includes(char)
-                            ? theme === 'dark'
-                              ? 'bg-green-900/30 text-green-300 border border-green-700'
-                              : 'bg-green-100 text-green-700 border border-green-300'
-                            : theme === 'dark'
-                              ? 'bg-slate-700 text-slate-300'
-                              : 'bg-slate-100 text-slate-600'
-                        }`}
-                      >
-                        {char}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-
   return (
-    <div className="min-h-screen px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen px-4 sm:px-6 lg:px-8 py-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
@@ -393,12 +292,12 @@ const LCS: React.FC = () => {
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-4 gap-6">
           {/* Left Panel - Controls */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="lg:col-span-1 space-y-6"
+            className="lg:col-span-1 space-y-4"
           >
             <StringInputs
               strings={strings}
@@ -411,14 +310,13 @@ const LCS: React.FC = () => {
               theme={theme}
             />
             <Controls />
-            <ResultDisplay />
           </motion.div>
 
           {/* Center - Visualization */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="lg:col-span-1"
+            className="lg:col-span-3"
           >
             <DPTableVisualizer
               dpTable={strings.length > 2 ? dpTable[currentSlice] : dpTable}
@@ -426,23 +324,24 @@ const LCS: React.FC = () => {
               currentStep={currentStep}
               theme={theme}
               setCurrentStep={setCurrentStep}
-            />
-          </motion.div>
-
-          {/* Right Panel - Code */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="lg:col-span-1"
-          >
-            <CodeDisplay
-              code={generateLCSCode(strings, language, spaceOptimized)}
-              language={language}
-              title={`LCS Solution (${strings.length} strings)${spaceOptimized ? ' - Space Optimized' : ''}`}
-              className="h-full"
+              lcsResult={lcsResult}
             />
           </motion.div>
         </div>
+
+        {/* Code Display - Full Width Below */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-6"
+        >
+          <CodeDisplay
+            code={generateLCSCode(strings, language, spaceOptimized)}
+            language={language}
+            title={`LCS Solution (${strings.length} strings)${spaceOptimized ? ' - Space Optimized' : ''}`}
+            className="min-h-[400px]"
+          />
+        </motion.div>
       </div>
     </div>
   );

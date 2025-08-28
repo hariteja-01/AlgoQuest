@@ -16,6 +16,19 @@ export class TrieEngine {
     };
   }
 
+  clear(): void {
+    this.root = {
+      id: 'root',
+      char: '',
+      children: new Map(),
+      isEndOfWord: false,
+      depth: 0,
+      x: 0,
+      y: 0
+    };
+    this.nodeCounter = 0;
+  }
+
   insert(word: string): { path: TrieNode[], newNodes: TrieNode[] } {
     const path: TrieNode[] = [];
     const newNodes: TrieNode[] = [];
