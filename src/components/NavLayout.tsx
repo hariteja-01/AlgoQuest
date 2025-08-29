@@ -53,10 +53,10 @@ const NavLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           : 'bg-white/80 border-gray-200/50'
       }`}>
         <div className="max-w-7xl mx-auto px-6 h-20">
-          <div className="flex items-center justify-between h-full">
-            {/* Logo */}
+          <div className="grid grid-cols-3 items-center h-full">
+            {/* Logo - Left Section */}
             <motion.div 
-              className="flex items-center space-x-3"
+              className="flex items-center space-x-3 justify-start"
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
             >
@@ -65,8 +65,8 @@ const NavLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               </div>
             </motion.div>
 
-            {/* Navigation Tabs */}
-            <div className="flex-1 flex justify-center mx-8">
+            {/* Navigation Tabs - Center Section */}
+            <div className="flex justify-center">
               <ExpandableTabs 
                 tabs={tabs} 
                 activeColor="text-blue-600 dark:text-blue-400"
@@ -74,8 +74,8 @@ const NavLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               />
             </div>
 
-            {/* Settings */}
-            <div className="flex items-center space-x-4">
+            {/* Settings - Right Section */}
+            <div className="flex items-center space-x-4 justify-end">
               {/* Language Selector */}
               <div className="relative">
                 <select
@@ -131,11 +131,11 @@ const NavLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         </div>
 
         {/* Mobile Navigation Tabs */}
-        <div className="px-4 pb-4">
+        <div className="px-4 pb-4 flex justify-center">
           <ExpandableTabs 
             tabs={tabs} 
             activeColor="text-blue-600 dark:text-blue-400"
-            className="border-gray-200/50 dark:border-gray-700/50 w-full"
+            className="border-gray-200/50 dark:border-gray-700/50"
           />
         </div>
       </header>

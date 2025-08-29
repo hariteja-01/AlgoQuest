@@ -5,6 +5,7 @@ import { Crown, FileText, TreePine, Play, BookOpen, Zap, ArrowRight, Target, Cod
 import { useApp } from '../context/AppContext';
 import { ContainerScroll } from '../components/ContainerScroll';
 import { AlgorithmDashboard } from '../components/AlgorithmDashboard';
+import { DynamicBackground } from '../components/DynamicBackground';
 
 const Home: React.FC = () => {
   const { theme } = useApp();
@@ -37,42 +38,45 @@ const Home: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
+      {/* Dynamic Background */}
+      <DynamicBackground />
+      
       {/* Hero Scroll Section */}
-      <div className="flex flex-col overflow-hidden px-4 lg:px-8 -mt-12">
+      <div className="flex flex-col overflow-hidden px-4 lg:px-8 -mt-12 relative z-10">
         <ContainerScroll
           titleComponent={
-            <div className="space-y-6 mb-16">
+            <div className="space-y-6 mb-16 relative z-20">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
-                className="space-y-4"
+                className="space-y-4 p-8 rounded-3xl backdrop-blur-sm bg-white/10 dark:bg-slate-900/20 border border-white/20 dark:border-slate-700/30 shadow-2xl"
               >
                 <div className="flex items-center justify-center mb-3">
-                  <h1 className={`text-4xl md:text-7xl font-bold ${
+                  <h1 className={`text-4xl md:text-7xl font-bold drop-shadow-xl ${
                     theme === 'dark' ? 'text-white' : 'text-gray-900'
                   }`}>
                     AlgoQuest
                   </h1>
                 </div>
 
-                <h2 className={`text-3xl md:text-6xl font-bold leading-tight ${
+                <h2 className={`text-3xl md:text-6xl font-bold leading-tight drop-shadow-lg ${
                   theme === 'dark' ? 'text-white' : 'text-gray-900'
                 }`}>
                   Master{' '}
-                  <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent drop-shadow-sm">
                     Algorithms
                   </span>
                   {' '}through{' '}
-                  <span className="bg-gradient-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent drop-shadow-sm">
                     Interactive
                   </span>
                   {' '}Learning
                 </h2>
 
-                <p className={`text-lg md:text-xl max-w-4xl mx-auto leading-relaxed ${
-                  theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                <p className={`text-lg md:text-xl max-w-4xl mx-auto leading-relaxed drop-shadow-md ${
+                  theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
                 }`}>
                   Dive deep into N-Queens, LCS, and Trie algorithms with stunning 3D visualizations, 
                   real-time code generation, and immersive learning experiences that make complex concepts crystal clear.
@@ -91,18 +95,20 @@ const Home: React.FC = () => {
                     </motion.button>
                   </Link>
                   
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.98 }}
-                    className={`px-8 py-4 rounded-2xl font-semibold text-lg border-2 transition-all duration-300 backdrop-blur-sm ${
-                      theme === 'dark'
-                        ? 'border-gray-600 text-gray-300 hover:border-gray-500 hover:bg-gray-800/50'
-                        : 'border-gray-300 text-gray-700 hover:border-gray-400 hover:bg-white/50'
-                    }`}
-                  >
-                    <BookOpen className="h-5 w-5 inline-block mr-2" />
-                    Explore Algorithms
-                  </motion.button>
+                  <a href="https://github.com/hariteja-01/AlgoQuest" target="_blank" rel="noopener noreferrer">
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.98 }}
+                      className={`px-8 py-4 rounded-2xl font-semibold text-lg border-2 transition-all duration-300 backdrop-blur-sm ${
+                        theme === 'dark'
+                          ? 'border-gray-600 text-gray-300 hover:border-gray-500 hover:bg-gray-800/50'
+                          : 'border-gray-300 text-gray-700 hover:border-gray-400 hover:bg-white/50'
+                      }`}
+                    >
+                      <BookOpen className="h-5 w-5 inline-block mr-2" />
+                      View Docs
+                    </motion.button>
+                  </a>
                 </div>
               </motion.div>
             </div>
@@ -113,13 +119,13 @@ const Home: React.FC = () => {
       </div>
 
       {/* Features Section */}
-      <section className="px-4 sm:px-6 lg:px-12 py-12">
+      <section className="px-4 sm:px-6 lg:px-12 py-12 relative z-10">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-12"
+            className="text-center mb-12 p-6 rounded-2xl backdrop-blur-sm bg-white/5 dark:bg-slate-900/10 border border-white/10 dark:border-slate-700/20"
           >
             <h2 className={`text-4xl md:text-6xl font-bold mb-4 ${
               theme === 'dark' ? 'text-white' : 'text-gray-900'
@@ -216,13 +222,13 @@ const Home: React.FC = () => {
       </section>
 
       {/* How It Works */}
-      <section className="px-4 sm:px-6 lg:px-12 py-12">
+      <section className="px-4 sm:px-6 lg:px-12 py-12 relative z-10">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-12"
+            className="text-center mb-12 p-6 rounded-2xl backdrop-blur-sm bg-white/5 dark:bg-slate-900/10 border border-white/10 dark:border-slate-700/20"
           >
             <h2 className={`text-4xl md:text-5xl font-bold mb-4 ${
               theme === 'dark' ? 'text-white' : 'text-gray-900'
@@ -308,17 +314,17 @@ const Home: React.FC = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="px-4 sm:px-6 lg:px-12 py-12">
+      <section className="px-4 sm:px-6 lg:px-12 py-12 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             whileHover={{ scale: 1.02 }}
-            className={`p-8 rounded-3xl backdrop-blur-sm ${
+            className={`p-8 rounded-3xl backdrop-blur-md ${
               theme === 'dark'
-                ? 'bg-gradient-to-r from-gray-800/60 to-gray-700/60 border border-gray-600/50'
-                : 'bg-gradient-to-r from-white/80 to-gray-50/80 border border-gray-200/50'
+                ? 'bg-slate-900/40 border border-slate-700/40'
+                : 'bg-white/40 border border-white/40'
             } shadow-2xl relative overflow-hidden`}
           >
             {/* Animated background elements */}
