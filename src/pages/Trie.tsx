@@ -87,13 +87,14 @@ const Trie: React.FC = React.memo(() => {
     updateMemoryStats();
   }, [engine, words, updateMemoryStats]);
 
-  const clearTrie = useCallback(() => {
+  const clearTrie = () => {
+    engine.clear();
     setWords([]);
     setSuggestions([]);
     setSearchResult(null);
     setAnimationPath([]);
     updateMemoryStats();
-  }, [updateMemoryStats]);
+  };
 
   const handleFileUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
