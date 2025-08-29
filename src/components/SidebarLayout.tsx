@@ -100,14 +100,14 @@ const Logo: React.FC = () => {
   const { theme } = useApp();
   
   return (
-    <Link to="/" className="flex items-center space-x-3 px-3 py-2">
+    <Link to="/" className="flex items-center space-x-3 px-3 py-3">
       <div className="flex-shrink-0">
-        <NavIcon />
+        <NavIcon size={48} />
       </div>
       <motion.span
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className={`text-lg font-bold whitespace-nowrap ${
+        className={`text-xl font-bold whitespace-nowrap ${
           theme === 'dark' ? 'text-white' : 'text-gray-900'
         }`}
       >
@@ -119,9 +119,9 @@ const Logo: React.FC = () => {
 
 const LogoIcon: React.FC = () => {
   return (
-    <Link to="/" className="flex items-center justify-center px-3 py-2">
+    <Link to="/" className="flex items-center justify-center px-3 py-3">
       <div className="flex-shrink-0">
-        <NavIcon />
+        <NavIcon size={44} />
       </div>
     </Link>
   );

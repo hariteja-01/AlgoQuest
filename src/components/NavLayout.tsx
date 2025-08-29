@@ -52,7 +52,7 @@ const NavLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           ? 'bg-gray-900/80 border-gray-700/50'
           : 'bg-white/80 border-gray-200/50'
       }`}>
-        <div className="max-w-7xl mx-auto px-6 h-20">
+        <div className="max-w-7xl mx-auto px-6 h-24">
           <div className="grid grid-cols-3 items-center h-full">
             {/* Logo - Left Section */}
             <motion.div 
@@ -106,7 +106,7 @@ const NavLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           ? 'bg-gray-900/80 border-gray-700/50'
           : 'bg-white/80 border-gray-200/50'
       }`}>
-        <div className="flex items-center justify-between px-4 h-16">
+        <div className="flex items-center justify-between px-4 h-20">
           <div className="flex items-center space-x-3">
             <motion.button
               whileHover={{ scale: 1.05 }}

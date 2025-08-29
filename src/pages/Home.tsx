@@ -6,6 +6,7 @@ import { useApp } from '../context/AppContext';
 import { ContainerScroll } from '../components/ContainerScroll';
 import { AlgorithmDashboard } from '../components/AlgorithmDashboard';
 import { DynamicBackground } from '../components/DynamicBackground';
+import { AlgoQuestIcon } from '../components/AlgoQuestIcon';
 
 const Home: React.FC = () => {
   const { theme } = useApp();
