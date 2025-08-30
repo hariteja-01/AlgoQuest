@@ -168,7 +168,7 @@ AlgoQuest/
 ## 🎮 Usage Guide
 
 ### **N-Queens Solver**
-1. **Select Board Size**: Choose from 4×4 to 12×12
+1. **Select Board Size**: Choose from 4×4 to 10×10
 2. **Place Queens**: Click squares or use auto-solve
 3. **Watch Algorithm**: See backtracking in real-time
 4. **Explore Solutions**: Browse all possible solutions
