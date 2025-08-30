@@ -280,9 +280,9 @@ copies of the Software.
 
 **Hari Teja Patnala**
 - 🌐 GitHub: [@hariteja-01](https://github.com/hariteja-01)
-- 💼 LinkedIn: [Connect with me](https://linkedin.com/in/hariteja-patnala)
-- 📧 Email: [Contact](mailto:hariteja.patnala@example.com)
-- 🌍 Portfolio: [Visit my portfolio](https://hariteja-portfolio.dev)
+- 💼 LinkedIn: [Connect with me](https://linkedin.com/in/hari-teja-patnala)
+- 📧 Email: [Contact](mailto:patnalahariteja@gmail.com)
+- 🌍 Portfolio: [Visit my portfolio](https://app--hari-teja-patnala-portfolio-b08b17e9.base44.app/)
 
 ---
 
