@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Crown, FileText, TreePine, Play, BookOpen, Zap, ArrowRight, Target, Code2, Sparkles, Rocket } from 'lucide-react';
+import { Crown, FileText, TreePine, Play, BookOpen, Zap, ArrowRight, Target, Code2, Sparkles, Rocket, Route, Droplets, Bug, Egg, GitMerge, SlidersHorizontal, GraduationCap, Coins, TrendingUp, Navigation, Package, PenTool } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { ContainerScroll } from '../components/ContainerScroll';
 import { AlgorithmDashboard } from '../components/AlgorithmDashboard';
@@ -35,7 +35,111 @@ const Home: React.FC = () => {
       path: '/trie',
       color: 'from-green-500 to-emerald-500',
       features: ['Word Insertion', 'Auto-Complete', 'Memory Analysis', 'Bulk Import']
-    }
+    },
+    {
+      icon: Route,
+      title: 'Word Ladder',
+      description: 'BFS word transformation with constellation graph visualization',
+      path: '/word-ladder',
+      color: 'from-amber-500 to-orange-500',
+      features: ['BFS Search', 'Bi-directional', 'Dictionary Graph', 'Path Visualization']
+    },
+    {
+      icon: Droplets,
+      title: 'Trapping Rain Water',
+      description: 'Interactive terrain with animated water filling using 4 algorithm approaches',
+      path: '/trapping-water',
+      color: 'from-cyan-500 to-sky-500',
+      features: ['4 Approaches', 'Draggable Terrain', 'Water Physics', 'Stack Visualization']
+    },
+    {
+      icon: Bug,
+      title: 'Rotting Oranges',
+      description: 'Multi-source BFS infection simulator with wave propagation',
+      path: '/rotting-oranges',
+      color: 'from-red-500 to-orange-500',
+      features: ['Grid Editor', 'BFS Waves', 'Queue Tracking', 'Infection Animation']
+    },
+    {
+      icon: Egg,
+      title: 'Super Egg Drop',
+      description: 'DP + binary search optimization with building and egg physics',
+      path: '/super-egg-drop',
+      color: 'from-amber-400 to-yellow-500',
+      features: ['3 DP Approaches', 'Building Viz', 'DP Table Animation', 'Binary Search']
+    },
+    {
+      icon: GitMerge,
+      title: 'Merge Intervals',
+      description: 'Timeline-based interval merging with sorting animation',
+      path: '/merge-intervals',
+      color: 'from-emerald-500 to-teal-500',
+      features: ['Timeline Bars', 'Sort Animation', 'Merge Transitions', 'Interval Editor']
+    },
+    {
+      icon: SlidersHorizontal,
+      title: 'Sliding Window Max',
+      description: 'Monotonic deque visualization with sliding window animation',
+      path: '/sliding-window',
+      color: 'from-violet-500 to-purple-500',
+      features: ['Deque State', 'Window Highlight', 'Push/Pop Animation', 'Custom Input']
+    },
+    {
+      icon: GraduationCap,
+      title: 'Course Schedule',
+      description: "Topological sort with directed graph and cycle detection",
+      path: '/course-schedule',
+      color: 'from-sky-500 to-blue-500',
+      features: ['Graph Visualization', 'Cycle Detection', 'In-Degree Tracking', 'BFS Processing']
+    },
+    {
+      icon: Coins,
+      title: 'Coin Change',
+      description: 'DP array filling with coin stacking and optimal combination display',
+      path: '/coin-change',
+      color: 'from-yellow-400 to-amber-500',
+      features: ['DP Array', 'Coin Animation', 'Optimal Path', 'Custom Denominations']
+    },
+    {
+      icon: TrendingUp,
+      title: 'Longest Increasing Sub.',
+      description: 'Bar chart with DP and patience sorting (binary search) approaches',
+      path: '/lis',
+      color: 'from-pink-500 to-rose-500',
+      features: ['2 Approaches', 'Subsequence Highlight', 'Patience Sort', 'Tails Array']
+    },
+    {
+      icon: Navigation,
+      title: "Dijkstra's Shortest Path",
+      description: 'Weighted graph shortest path with priority queue and edge relaxation animation',
+      path: '/dijkstra',
+      color: 'from-teal-500 to-cyan-500',
+      features: ['Graph Visualization', 'Edge Relaxation', 'Distance Table', 'Priority Queue']
+    },
+    {
+      icon: Package,
+      title: '0/1 Knapsack',
+      description: 'DP table filling with item selection and backtracking for optimal combination',
+      path: '/knapsack',
+      color: 'from-indigo-500 to-purple-500',
+      features: ['DP Table', 'Item Cards', 'Backtracking', 'Custom Items']
+    },
+    {
+      icon: PenTool,
+      title: 'Edit Distance',
+      description: 'Levenshtein distance DP with operation backtracking and character comparison',
+      path: '/edit-distance',
+      color: 'from-orange-500 to-red-500',
+      features: ['DP Matrix', 'Operation Trace', 'Insert/Delete/Replace', 'Custom Words']
+    },
+    {
+      icon: Target,
+      title: 'Kth Largest Element',
+      description: 'QuickSelect partitioning with pivot animation and comparison counting',
+      path: '/kth-largest',
+      color: 'from-lime-500 to-green-500',
+      features: ['QuickSelect', 'Partition Viz', 'Pivot Highlight', 'O(n) Expected']
+    },
   ];
 
   return (
@@ -79,8 +183,8 @@ const Home: React.FC = () => {
                 <p className={`text-lg md:text-xl max-w-4xl mx-auto leading-relaxed drop-shadow-md ${
                   theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
                 }`}>
-                  Dive deep into N-Queens, LCS, and Trie algorithms with stunning 3D visualizations, 
-                  real-time code generation, and immersive learning experiences that make complex concepts crystal clear.
+                  Dive deep into {features.length} algorithm visualizations — from N-Queens backtracking to Trapping Rain Water, BFS infection simulations, DP optimization, and more.
+                  Multi-language code generation in C++, Python, and JavaScript with immersive learning experiences.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-2">
@@ -128,7 +232,7 @@ const Home: React.FC = () => {
             viewport={{ once: true }}
             className="text-center mb-12 p-6 rounded-2xl backdrop-blur-sm bg-white/5 dark:bg-slate-900/10 border border-white/10 dark:border-slate-700/20"
           >
-            <h2 className={`text-4xl md:text-6xl font-bold mb-4 ${
+              <h2 className={`text-4xl md:text-6xl font-bold mb-4 ${
               theme === 'dark' ? 'text-white' : 'text-gray-900'
             }`}>
               Interactive Algorithm{' '}
@@ -137,14 +241,14 @@ const Home: React.FC = () => {
               </span>
             </h2>
             <p className={`text-xl max-w-3xl mx-auto ${
-              theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
             }`}>
-              Dive deep into three fundamental algorithms with stunning visualizations, 
-              real-time code generation, and comprehensive learning tools.
+              Dive deep into {features.length} interactive algorithm experiences with stunning visualizations,
+                real-time code generation, and comprehensive learning tools.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             {features.map((feature, index) => (
               <motion.div
                 key={feature.title}

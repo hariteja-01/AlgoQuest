@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
-import { Crown, FileText, TreePine, Home, Menu, X, Settings } from 'lucide-react';
+import { Crown, FileText, TreePine, Home, Menu, X, Settings, Route } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { ThemeToggle } from './ThemeToggle';
 import { NavIcon } from './NavIcon';
@@ -153,6 +153,11 @@ const SidebarLayout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
       label: 'Trie',
       href: '/trie',
       icon: <TreePine className="h-5 w-5" />
+      },
+      {
+        label: 'Word Ladder',
+        href: '/word-ladder',
+        icon: <Route className="h-5 w-5" />
     }
   ];
 
