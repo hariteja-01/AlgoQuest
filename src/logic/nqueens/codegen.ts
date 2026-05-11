@@ -144,6 +144,109 @@ solutions.forEach((solution, index) => {
     console.log(\`Solution \${index + 1}: \${solution}\`);
 });`;
 
+    case 'java':
+      return `import java.util.*;
+
+class NQueensSolver {
+    private final int n;
+    private final List<int[]> solutions = new ArrayList<>();
+
+    NQueensSolver(int n) {
+        this.n = n;
+    }
+
+    private boolean isSafe(int[] queens, int row, int col) {
+        for (int i = 0; i < row; i++) {
+            if (queens[i] == col || queens[i] - i == col - row || queens[i] + i == col + row) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void solve(int[] queens, int row) {
+        if (row == n) {
+            solutions.add(Arrays.copyOf(queens, n));
+            return;
+        }
+        for (int col = 0; col < n; col++) {
+            if (isSafe(queens, row, col)) {
+                queens[row] = col;
+                solve(queens, row + 1);
+                queens[row] = -1;
+            }
+        }
+    }
+
+    List<int[]> solveNQueens() {
+        int[] queens = new int[n];
+        Arrays.fill(queens, -1);
+        solve(queens, 0);
+        return solutions;
+    }
+}
+
+class Demo {
+    public static void main(String[] args) {
+        NQueensSolver solver = new NQueensSolver(${n});
+        List<int[]> solutions = solver.solveNQueens();
+        System.out.println("Found " + solutions.size() + " solutions for ${n}-Queens");
+    }
+}`;
+
+    case 'csharp':
+      return `using System;
+using System.Collections.Generic;
+
+public class NQueensSolver {
+    private readonly int n;
+    private readonly List<int[]> solutions = new();
+
+    public NQueensSolver(int n) {
+        this.n = n;
+    }
+
+    private bool IsSafe(int[] queens, int row, int col) {
+        for (int i = 0; i < row; i++) {
+            if (queens[i] == col || queens[i] - i == col - row || queens[i] + i == col + row) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void Solve(int[] queens, int row) {
+        if (row == n) {
+            var copy = new int[n];
+            Array.Copy(queens, copy, n);
+            solutions.Add(copy);
+            return;
+        }
+        for (int col = 0; col < n; col++) {
+            if (IsSafe(queens, row, col)) {
+                queens[row] = col;
+                Solve(queens, row + 1);
+                queens[row] = -1;
+            }
+        }
+    }
+
+    public List<int[]> SolveNQueens() {
+        var queens = new int[n];
+        for (int i = 0; i < n; i++) queens[i] = -1;
+        Solve(queens, 0);
+        return solutions;
+    }
+}
+
+public class Demo {
+    public static void Main() {
+        var solver = new NQueensSolver(${n});
+        var solutions = solver.SolveNQueens();
+        Console.WriteLine($"Found {solutions.Count} solutions for ${n}-Queens");
+    }
+}`;
+
     default:
       return '';
   }

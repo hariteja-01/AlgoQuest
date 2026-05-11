@@ -183,8 +183,207 @@ console.log(trap([0,1,0,2,1,0,1,3,2,1,2,1])); // 6`,
 console.log(trap([0,1,0,2,1,0,1,3,2,1,2,1])); // 6`,
 };
 
+const javaCode: Record<ApproachType, string> = {
+  bruteforce: `class Solution {
+  public int trap(int[] height) {
+    int n = height.length, total = 0;
+    for (int i = 0; i < n; i++) {
+      int leftMax = 0, rightMax = 0;
+      for (int j = 0; j <= i; j++) leftMax = Math.max(leftMax, height[j]);
+      for (int j = i; j < n; j++) rightMax = Math.max(rightMax, height[j]);
+      total += Math.min(leftMax, rightMax) - height[i];
+    }
+    return total;
+  }
+}
+
+class Demo {
+  public static void main(String[] args) {
+    Solution solution = new Solution();
+    System.out.println(solution.trap(new int[]{0,1,0,2,1,0,1,3,2,1,2,1}));
+  }
+}`,
+  dp: `class Solution {
+  public int trap(int[] height) {
+    int n = height.length;
+    if (n == 0) return 0;
+    int[] leftMax = new int[n];
+    int[] rightMax = new int[n];
+    leftMax[0] = height[0];
+    for (int i = 1; i < n; i++) leftMax[i] = Math.max(leftMax[i - 1], height[i]);
+    rightMax[n - 1] = height[n - 1];
+    for (int i = n - 2; i >= 0; i--) rightMax[i] = Math.max(rightMax[i + 1], height[i]);
+    int total = 0;
+    for (int i = 0; i < n; i++) total += Math.min(leftMax[i], rightMax[i]) - height[i];
+    return total;
+  }
+}
+
+class Demo {
+  public static void main(String[] args) {
+    Solution solution = new Solution();
+    System.out.println(solution.trap(new int[]{0,1,0,2,1,0,1,3,2,1,2,1}));
+  }
+}`,
+  twopointer: `class Solution {
+  public int trap(int[] height) {
+    int left = 0, right = height.length - 1;
+    int leftMax = 0, rightMax = 0, total = 0;
+    while (left < right) {
+      if (height[left] < height[right]) {
+        if (height[left] >= leftMax) leftMax = height[left];
+        else total += leftMax - height[left];
+        left++;
+      } else {
+        if (height[right] >= rightMax) rightMax = height[right];
+        else total += rightMax - height[right];
+        right--;
+      }
+    }
+    return total;
+  }
+}
+
+class Demo {
+  public static void main(String[] args) {
+    Solution solution = new Solution();
+    System.out.println(solution.trap(new int[]{0,1,0,2,1,0,1,3,2,1,2,1}));
+  }
+}`,
+  stack: `import java.util.*;
+
+class Solution {
+  public int trap(int[] height) {
+    Deque<Integer> stack = new ArrayDeque<>();
+    int total = 0;
+    for (int i = 0; i < height.length; i++) {
+      while (!stack.isEmpty() && height[i] > height[stack.peek()]) {
+        int top = stack.pop();
+        if (stack.isEmpty()) break;
+        int w = i - stack.peek() - 1;
+        int h = Math.min(height[stack.peek()], height[i]) - height[top];
+        total += w * h;
+      }
+      stack.push(i);
+    }
+    return total;
+  }
+}
+
+class Demo {
+  public static void main(String[] args) {
+    Solution solution = new Solution();
+    System.out.println(solution.trap(new int[]{0,1,0,2,1,0,1,3,2,1,2,1}));
+  }
+}`,
+};
+
+const csharpCode: Record<ApproachType, string> = {
+  bruteforce: `using System;
+
+public class Solution {
+  public int Trap(int[] height) {
+    int n = height.Length, total = 0;
+    for (int i = 0; i < n; i++) {
+      int leftMax = 0, rightMax = 0;
+      for (int j = 0; j <= i; j++) leftMax = Math.Max(leftMax, height[j]);
+      for (int j = i; j < n; j++) rightMax = Math.Max(rightMax, height[j]);
+      total += Math.Min(leftMax, rightMax) - height[i];
+    }
+    return total;
+  }
+}
+
+public class Demo {
+  public static void Main() {
+    var solution = new Solution();
+    Console.WriteLine(solution.Trap(new int[]{0,1,0,2,1,0,1,3,2,1,2,1}));
+  }
+}`,
+  dp: `using System;
+
+public class Solution {
+  public int Trap(int[] height) {
+    int n = height.Length;
+    if (n == 0) return 0;
+    int[] leftMax = new int[n];
+    int[] rightMax = new int[n];
+    leftMax[0] = height[0];
+    for (int i = 1; i < n; i++) leftMax[i] = Math.Max(leftMax[i - 1], height[i]);
+    rightMax[n - 1] = height[n - 1];
+    for (int i = n - 2; i >= 0; i--) rightMax[i] = Math.Max(rightMax[i + 1], height[i]);
+    int total = 0;
+    for (int i = 0; i < n; i++) total += Math.Min(leftMax[i], rightMax[i]) - height[i];
+    return total;
+  }
+}
+
+public class Demo {
+  public static void Main() {
+    var solution = new Solution();
+    Console.WriteLine(solution.Trap(new int[]{0,1,0,2,1,0,1,3,2,1,2,1}));
+  }
+}`,
+  twopointer: `using System;
+
+public class Solution {
+  public int Trap(int[] height) {
+    int left = 0, right = height.Length - 1;
+    int leftMax = 0, rightMax = 0, total = 0;
+    while (left < right) {
+      if (height[left] < height[right]) {
+        if (height[left] >= leftMax) leftMax = height[left];
+        else total += leftMax - height[left];
+        left++;
+      } else {
+        if (height[right] >= rightMax) rightMax = height[right];
+        else total += rightMax - height[right];
+        right--;
+      }
+    }
+    return total;
+  }
+}
+
+public class Demo {
+  public static void Main() {
+    var solution = new Solution();
+    Console.WriteLine(solution.Trap(new int[]{0,1,0,2,1,0,1,3,2,1,2,1}));
+  }
+}`,
+  stack: `using System;
+using System.Collections.Generic;
+
+public class Solution {
+  public int Trap(int[] height) {
+    var stack = new Stack<int>();
+    int total = 0;
+    for (int i = 0; i < height.Length; i++) {
+      while (stack.Count > 0 && height[i] > height[stack.Peek()]) {
+        int top = stack.Pop();
+        if (stack.Count == 0) break;
+        int w = i - stack.Peek() - 1;
+        int h = Math.Min(height[stack.Peek()], height[i]) - height[top];
+        total += w * h;
+      }
+      stack.Push(i);
+    }
+    return total;
+  }
+}
+
+public class Demo {
+  public static void Main() {
+    var solution = new Solution();
+    Console.WriteLine(solution.Trap(new int[]{0,1,0,2,1,0,1,3,2,1,2,1}));
+  }
+}`,
+};
+
 export const generateTrappingWaterCode = (approach: ApproachType, language: Language): string => {
   if (language === 'cpp') return cppCode[approach] ?? '';
   if (language === 'python') return pyCode[approach] ?? '';
+  if (language === 'java') return javaCode[approach] ?? '';
+  if (language === 'csharp') return csharpCode[approach] ?? '';
   return jsCode[approach] ?? '';
 };

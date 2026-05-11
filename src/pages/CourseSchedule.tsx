@@ -41,7 +41,7 @@ const CourseSchedule: React.FC = () => {
   }, [playing, stepIdx, steps.length, speed]);
 
   const current = steps[stepIdx] || steps[0];
-  const code = generateCourseScheduleCode(language);
+  const code = generateCourseScheduleCode(config.numCourses, config.prerequisites, language);
 
   // Simple circular layout for graph
   const nodePositions = useMemo(() => {

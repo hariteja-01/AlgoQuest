@@ -1,146 +1,26 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Crown, FileText, TreePine, Play, BookOpen, Zap, ArrowRight, Target, Code2, Sparkles, Rocket, Route, Droplets, Bug, Egg, GitMerge, SlidersHorizontal, GraduationCap, Coins, TrendingUp, Navigation, Package, PenTool } from 'lucide-react';
+import { Play, BookOpen, Zap, ArrowRight, Target, Code2, Sparkles, Rocket, Map, Flame, Trophy } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { useLearning } from '../context/LearningContext';
 import { ContainerScroll } from '../components/ContainerScroll';
 import { AlgorithmDashboard } from '../components/AlgorithmDashboard';
 import { DynamicBackground } from '../components/DynamicBackground';
-import { AlgoQuestIcon } from '../components/AlgoQuestIcon';
+import { algorithmCategories, algorithmCategoryCounts, algorithms } from '../lib/algorithmCatalog';
+import type { AlgorithmCategoryId } from '../lib/algorithmCatalog';
 
 const Home: React.FC = () => {
   const { theme } = useApp();
+  const { streak, totalCompleted, totalAvailable } = useLearning();
+  const [activeCategory, setActiveCategory] = useState<AlgorithmCategoryId | 'all'>('all');
 
-  const features = [
-    {
-      icon: Crown,
-      title: 'N-Queens Visualizer',
-      description: 'Interactive chessboard with backtracking algorithm visualization',
-      path: '/nqueens',
-      color: 'from-purple-500 to-pink-500',
-      features: ['3D Chessboard', 'Solution Gallery', 'Attack Patterns', 'Performance Stats']
-    },
-    {
-      icon: FileText,
-      title: 'LCS Visualizer',
-      description: 'Dynamic programming visualization for Longest Common Subsequence',
-      path: '/lcs',
-      color: 'from-blue-500 to-cyan-500',
-      features: ['2D-4D Support', 'Path Reconstruction', 'Space Optimization', 'Multi-String']
-    },
-    {
-      icon: TreePine,
-      title: 'Trie Data Structure',
-      description: 'Interactive prefix tree with search and auto-completion',
-      path: '/trie',
-      color: 'from-green-500 to-emerald-500',
-      features: ['Word Insertion', 'Auto-Complete', 'Memory Analysis', 'Bulk Import']
-    },
-    {
-      icon: Route,
-      title: 'Word Ladder',
-      description: 'BFS word transformation with constellation graph visualization',
-      path: '/word-ladder',
-      color: 'from-amber-500 to-orange-500',
-      features: ['BFS Search', 'Bi-directional', 'Dictionary Graph', 'Path Visualization']
-    },
-    {
-      icon: Droplets,
-      title: 'Trapping Rain Water',
-      description: 'Interactive terrain with animated water filling using 4 algorithm approaches',
-      path: '/trapping-water',
-      color: 'from-cyan-500 to-sky-500',
-      features: ['4 Approaches', 'Draggable Terrain', 'Water Physics', 'Stack Visualization']
-    },
-    {
-      icon: Bug,
-      title: 'Rotting Oranges',
-      description: 'Multi-source BFS infection simulator with wave propagation',
-      path: '/rotting-oranges',
-      color: 'from-red-500 to-orange-500',
-      features: ['Grid Editor', 'BFS Waves', 'Queue Tracking', 'Infection Animation']
-    },
-    {
-      icon: Egg,
-      title: 'Super Egg Drop',
-      description: 'DP + binary search optimization with building and egg physics',
-      path: '/super-egg-drop',
-      color: 'from-amber-400 to-yellow-500',
-      features: ['3 DP Approaches', 'Building Viz', 'DP Table Animation', 'Binary Search']
-    },
-    {
-      icon: GitMerge,
-      title: 'Merge Intervals',
-      description: 'Timeline-based interval merging with sorting animation',
-      path: '/merge-intervals',
-      color: 'from-emerald-500 to-teal-500',
-      features: ['Timeline Bars', 'Sort Animation', 'Merge Transitions', 'Interval Editor']
-    },
-    {
-      icon: SlidersHorizontal,
-      title: 'Sliding Window Max',
-      description: 'Monotonic deque visualization with sliding window animation',
-      path: '/sliding-window',
-      color: 'from-violet-500 to-purple-500',
-      features: ['Deque State', 'Window Highlight', 'Push/Pop Animation', 'Custom Input']
-    },
-    {
-      icon: GraduationCap,
-      title: 'Course Schedule',
-      description: "Topological sort with directed graph and cycle detection",
-      path: '/course-schedule',
-      color: 'from-sky-500 to-blue-500',
-      features: ['Graph Visualization', 'Cycle Detection', 'In-Degree Tracking', 'BFS Processing']
-    },
-    {
-      icon: Coins,
-      title: 'Coin Change',
-      description: 'DP array filling with coin stacking and optimal combination display',
-      path: '/coin-change',
-      color: 'from-yellow-400 to-amber-500',
-      features: ['DP Array', 'Coin Animation', 'Optimal Path', 'Custom Denominations']
-    },
-    {
-      icon: TrendingUp,
-      title: 'Longest Increasing Sub.',
-      description: 'Bar chart with DP and patience sorting (binary search) approaches',
-      path: '/lis',
-      color: 'from-pink-500 to-rose-500',
-      features: ['2 Approaches', 'Subsequence Highlight', 'Patience Sort', 'Tails Array']
-    },
-    {
-      icon: Navigation,
-      title: "Dijkstra's Shortest Path",
-      description: 'Weighted graph shortest path with priority queue and edge relaxation animation',
-      path: '/dijkstra',
-      color: 'from-teal-500 to-cyan-500',
-      features: ['Graph Visualization', 'Edge Relaxation', 'Distance Table', 'Priority Queue']
-    },
-    {
-      icon: Package,
-      title: '0/1 Knapsack',
-      description: 'DP table filling with item selection and backtracking for optimal combination',
-      path: '/knapsack',
-      color: 'from-indigo-500 to-purple-500',
-      features: ['DP Table', 'Item Cards', 'Backtracking', 'Custom Items']
-    },
-    {
-      icon: PenTool,
-      title: 'Edit Distance',
-      description: 'Levenshtein distance DP with operation backtracking and character comparison',
-      path: '/edit-distance',
-      color: 'from-orange-500 to-red-500',
-      features: ['DP Matrix', 'Operation Trace', 'Insert/Delete/Replace', 'Custom Words']
-    },
-    {
-      icon: Target,
-      title: 'Kth Largest Element',
-      description: 'QuickSelect partitioning with pivot animation and comparison counting',
-      path: '/kth-largest',
-      color: 'from-lime-500 to-green-500',
-      features: ['QuickSelect', 'Partition Viz', 'Pivot Highlight', 'O(n) Expected']
-    },
-  ];
+  const visibleAlgorithms = useMemo(() => {
+    if (activeCategory === 'all') {
+      return algorithms;
+    }
+    return algorithms.filter((algorithm) => algorithm.category === activeCategory);
+  }, [activeCategory]);
 
   return (
     <div className="min-h-screen relative">
@@ -183,7 +63,7 @@ const Home: React.FC = () => {
                 <p className={`text-lg md:text-xl max-w-4xl mx-auto leading-relaxed drop-shadow-md ${
                   theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
                 }`}>
-                  Dive deep into {features.length} algorithm visualizations — from N-Queens backtracking to Trapping Rain Water, BFS infection simulations, DP optimization, and more.
+                  Dive deep into {algorithms.length} algorithm visualizations — from N-Queens backtracking to Trapping Rain Water, BFS infection simulations, DP optimization, and more.
                   Multi-language code generation in C++, Python, and JavaScript with immersive learning experiences.
                 </p>
 
@@ -243,45 +123,106 @@ const Home: React.FC = () => {
             <p className={`text-xl max-w-3xl mx-auto ${
                 theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
             }`}>
-              Dive deep into {features.length} interactive algorithm experiences with stunning visualizations,
+              Dive deep into {algorithms.length} interactive algorithm experiences with stunning visualizations,
                 real-time code generation, and comprehensive learning tools.
             </p>
           </motion.div>
 
+          <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
+            <button
+              type="button"
+              onClick={() => setActiveCategory('all')}
+              aria-pressed={activeCategory === 'all'}
+              className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-all duration-300 ${
+                activeCategory === 'all'
+                  ? 'border-blue-300 bg-blue-600 text-white shadow-lg shadow-blue-500/20'
+                  : theme === 'dark'
+                    ? 'border-gray-700 bg-gray-800/60 text-gray-200 hover:border-blue-500/40 hover:bg-gray-800'
+                    : 'border-gray-200 bg-white/80 text-gray-700 hover:border-blue-200 hover:bg-blue-50'
+              }`}
+            >
+              <span>All</span>
+              <span className={`rounded-full px-2 py-0.5 text-xs ${
+                activeCategory === 'all'
+                  ? 'bg-white/20 text-white'
+                  : theme === 'dark'
+                    ? 'bg-gray-700 text-gray-200'
+                    : 'bg-gray-100 text-gray-700'
+              }`}>
+                {algorithms.length}
+              </span>
+            </button>
+
+            {algorithmCategories.map((category) => {
+              const isActive = activeCategory === category.id;
+              const count = algorithmCategoryCounts[category.id] ?? 0;
+
+              return (
+                <button
+                  key={category.id}
+                  type="button"
+                  onClick={() => setActiveCategory(category.id)}
+                  aria-pressed={isActive}
+                  className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-all duration-300 ${
+                    isActive
+                      ? 'border-blue-300 bg-blue-600 text-white shadow-lg shadow-blue-500/20'
+                      : theme === 'dark'
+                        ? 'border-gray-700 bg-gray-800/60 text-gray-200 hover:border-blue-500/40 hover:bg-gray-800'
+                        : 'border-gray-200 bg-white/80 text-gray-700 hover:border-blue-200 hover:bg-blue-50'
+                  }`}
+                >
+                  <span>{category.label}</span>
+                  <span className={`rounded-full px-2 py-0.5 text-xs ${
+                    isActive
+                      ? 'bg-white/20 text-white'
+                      : theme === 'dark'
+                        ? 'bg-gray-700 text-gray-200'
+                        : 'bg-gray-100 text-gray-700'
+                  }`}>
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-            {features.map((feature, index) => (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.2 }}
-                whileHover={{ y: -12, scale: 1.02 }}
-                className={`group relative p-6 rounded-3xl backdrop-blur-sm transition-all duration-500 ${
-                  theme === 'dark'
-                    ? 'bg-gray-800/60 border border-gray-700/50 hover:bg-gray-800/80'
-                    : 'bg-white/80 border border-gray-200/50 hover:bg-white'
-                } shadow-xl hover:shadow-2xl`}
-              >
-                <div className="relative z-10">
-                  <div className={`inline-flex p-3 rounded-2xl bg-gradient-to-br ${feature.color} mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                    <feature.icon className="h-6 w-6 text-white" />
-                  </div>
+            {visibleAlgorithms.map((algorithm, index) => {
+              const Icon = algorithm.icon;
+
+              return (
+                <motion.div
+                  key={algorithm.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.2 }}
+                  whileHover={{ y: -12, scale: 1.02 }}
+                  className={`group relative flex h-full flex-col p-6 rounded-3xl backdrop-blur-sm transition-all duration-500 ${
+                    theme === 'dark'
+                      ? 'bg-gray-800/60 border border-gray-700/50 hover:bg-gray-800/80'
+                      : 'bg-white/80 border border-gray-200/50 hover:bg-white'
+                  } shadow-xl hover:shadow-2xl`}
+                >
+                  <div className="relative z-10 flex h-full flex-col">
+                    <div className={`inline-flex p-3 rounded-2xl bg-gradient-to-br ${algorithm.color} mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                      <Icon className="h-6 w-6 text-white" />
+                    </div>
                   
                   <h3 className={`text-xl font-bold mb-3 ${
                     theme === 'dark' ? 'text-white' : 'text-gray-900'
                   }`}>
-                    {feature.title}
+                    {algorithm.title}
                   </h3>
                   
                   <p className={`text-base mb-4 leading-relaxed ${
                     theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
                   }`}>
-                    {feature.description}
+                    {algorithm.description}
                   </p>
 
                   <div className="space-y-2 mb-6">
-                    {feature.features.map((item, idx) => (
+                    {algorithm.highlights.map((item, idx) => (
                       <motion.div 
                         key={idx} 
                         className="flex items-center space-x-3"
@@ -302,27 +243,89 @@ const Home: React.FC = () => {
                     ))}
                   </div>
 
-                  <Link to={feature.path}>
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className={`w-full px-6 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center space-x-2 ${
-                        theme === 'dark'
-                          ? 'bg-gray-700 text-gray-200 hover:bg-gray-600 border border-gray-600'
-                          : 'bg-gray-100 text-gray-800 hover:bg-gray-200 border border-gray-200'
-                      }`}
-                    >
-                      <span>Explore {feature.title}</span>
-                      <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                    </motion.button>
-                  </Link>
+                  <div className="mt-auto">
+                    <Link to={algorithm.path}>
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        title={`Explore ${algorithm.title}`}
+                        className={`w-full px-6 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center space-x-2 ${
+                          theme === 'dark'
+                            ? 'bg-gray-700 text-gray-200 hover:bg-gray-600 border border-gray-600'
+                            : 'bg-gray-100 text-gray-800 hover:bg-gray-200 border border-gray-200'
+                        }`}
+                      >
+                        <span className="truncate">Explore {algorithm.shortTitle}</span>
+                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      </motion.button>
+                    </Link>
+                  </div>
                 </div>
 
                 {/* Hover gradient overlay */}
-                <div className={`absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-10 transition-opacity duration-500 bg-gradient-to-br ${feature.color}`}></div>
-              </motion.div>
-            ))}
+                  <div className={`absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-10 transition-opacity duration-500 bg-gradient-to-br ${algorithm.color}`}></div>
+                </motion.div>
+              );
+            })}
           </div>
+        </div>
+      </section>
+
+      {/* Learning Path CTA Banner */}
+      <section className="px-4 sm:px-6 lg:px-12 py-6 relative z-10">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className={`rounded-3xl border p-6 backdrop-blur-md flex flex-col md:flex-row items-center gap-6 ${
+              theme === 'dark'
+                ? 'border-orange-500/20 bg-gradient-to-r from-orange-950/40 via-amber-950/30 to-yellow-950/40'
+                : 'border-orange-200 bg-gradient-to-r from-orange-50 via-amber-50 to-yellow-50'
+            }`}
+          >
+            <div className="flex items-center gap-4">
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 shadow-xl shadow-orange-500/30 flex-shrink-0">
+                <Map className="h-8 w-8 text-white" />
+              </div>
+              <div>
+                <h3 className={`text-xl font-bold ${ theme === 'dark' ? 'text-white' : 'text-gray-900' }`}>
+                  Duolingo-Style Learning Path 🗺️
+                </h3>
+                <p className={`text-sm ${ theme === 'dark' ? 'text-gray-400' : 'text-gray-600' }`}>
+                  Follow a guided map, earn XP, maintain your streak, and unlock algorithms one by one.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-6 md:ml-auto flex-shrink-0">
+              {streak.currentStreak > 0 && (
+                <div className="text-center">
+                  <div className="flex items-center gap-1 text-orange-400">
+                    <Flame className="h-5 w-5" />
+                    <span className="text-2xl font-black">{streak.currentStreak}</span>
+                  </div>
+                  <p className="text-[10px] text-gray-500">day streak</p>
+                </div>
+              )}
+              <div className="text-center">
+                <div className="flex items-center gap-1 text-yellow-400">
+                  <Trophy className="h-5 w-5" />
+                  <span className="text-2xl font-black">{totalCompleted}</span>
+                </div>
+                <p className="text-[10px] text-gray-500">/{totalAvailable} done</p>
+              </div>
+              <Link to="/learning-path">
+                <motion.button
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-2xl font-bold shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center gap-2"
+                >
+                  <span>Start Path</span>
+                  <ArrowRight className="h-4 w-4" />
+                </motion.button>
+              </Link>
+            </div>
+          </motion.div>
         </div>
       </section>
 

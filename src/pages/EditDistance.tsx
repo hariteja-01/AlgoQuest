@@ -39,7 +39,7 @@ const EditDistance: React.FC = () => {
 
   const current = steps[stepIdx] || steps[0];
   const dp = current?.dp ?? [];
-  const code = generateEditDistanceCode(language);
+  const code = generateEditDistanceCode(word1, word2, language);
 
   return (
     <div className={`min-h-screen px-4 py-6 sm:px-6 lg:px-8 ${dark ? 'bg-slate-950' : 'bg-slate-50'}`}>

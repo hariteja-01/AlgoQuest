@@ -64,13 +64,16 @@ const CodeDisplay: React.FC<CodeDisplayProps> = ({
       javascript: 'JavaScript',
       python: 'Python',
       cpp: 'C++',
-      java: 'Java'
+      java: 'Java',
+      csharp: 'C#'
     };
     return names[lang as keyof typeof names] || lang;
   };
 
   const getSyntaxHighlighterLanguage = (lang: string) => {
-    return lang === 'cpp' ? 'c' : lang;
+    if (lang === 'cpp') return 'c';
+    if (lang === 'csharp') return 'csharp';
+    return lang;
   };
 
   return (

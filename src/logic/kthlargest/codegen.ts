@@ -1,6 +1,8 @@
 import { Language } from '../../types';
 
-export const generateKthLargestCode = (language: Language): string => {
+export const generateKthLargestCode = (nums: number[], k: number, language: Language): string => {
+    const safeNums = nums.length > 0 ? nums : [3, 2, 1, 5, 6, 4];
+    const safeK = Math.min(Math.max(k, 1), safeNums.length);
   if (language === 'cpp') return `#include <vector>
 #include <algorithm>
 using namespace std;
@@ -19,6 +21,71 @@ int findKthLargest(vector<int>& nums, int k) {
         else hi = i - 1;
     }
     return nums[target];
+}
+
+int main() {
+    vector<int> nums = {${safeNums.join(', ')}};
+    int k = ${safeK};
+    int result = findKthLargest(nums, k);
+    return 0;
+}`;
+  if (language === 'java') return `class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        int target = nums.length - k;
+        int lo = 0, hi = nums.length - 1;
+        while (lo <= hi) {
+            int pivot = nums[hi];
+            int i = lo;
+            for (int j = lo; j < hi; j++) {
+                if (nums[j] <= pivot) {
+                    int tmp = nums[i]; nums[i] = nums[j]; nums[j] = tmp;
+                    i++;
+                }
+            }
+            int tmp = nums[i]; nums[i] = nums[hi]; nums[hi] = tmp;
+            if (i == target) return nums[i];
+            if (i < target) lo = i + 1;
+            else hi = i - 1;
+        }
+        return nums[target];
+    }
+}
+
+class Demo {
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        System.out.println(solution.findKthLargest(new int[]{${safeNums.join(', ')}}, ${safeK}));
+    }
+}`;
+  if (language === 'csharp') return `using System;
+
+public class Solution {
+    public int FindKthLargest(int[] nums, int k) {
+        int target = nums.Length - k;
+        int lo = 0, hi = nums.Length - 1;
+        while (lo <= hi) {
+            int pivot = nums[hi];
+            int i = lo;
+            for (int j = lo; j < hi; j++) {
+                if (nums[j] <= pivot) {
+                    int tmp = nums[i]; nums[i] = nums[j]; nums[j] = tmp;
+                    i++;
+                }
+            }
+            int temp = nums[i]; nums[i] = nums[hi]; nums[hi] = temp;
+            if (i == target) return nums[i];
+            if (i < target) lo = i + 1;
+            else hi = i - 1;
+        }
+        return nums[target];
+    }
+}
+
+public class Demo {
+    public static void Main() {
+        var solution = new Solution();
+        Console.WriteLine(solution.FindKthLargest(new int[] {${safeNums.join(', ')}}, ${safeK}));
+    }
 }`;
   if (language === 'python') return `import random
 
@@ -38,7 +105,7 @@ def findKthLargest(nums, k):
         else: hi = i - 1
     return nums[target]
 
-print(findKthLargest([3,2,1,5,6,4], 2))  # 5`;
+print(findKthLargest([${safeNums.join(', ')}], ${safeK}))`;
   return `// QuickSelect — O(n) average
 function findKthLargest(nums, k) {
     const target = nums.length - k;
@@ -55,5 +122,5 @@ function findKthLargest(nums, k) {
     }
     return nums[target];
 }
-console.log(findKthLargest([3,2,1,5,6,4], 2)); // 5`;
+console.log(findKthLargest([${safeNums.join(', ')}], ${safeK}));`;
 };

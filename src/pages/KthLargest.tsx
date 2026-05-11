@@ -38,7 +38,7 @@ const KthLargest: React.FC = () => {
   const current = steps[stepIdx] || steps[0];
   const displayNums = current?.nums ?? nums;
   const maxVal = Math.max(...displayNums, 1);
-  const code = generateKthLargestCode(language);
+  const code = generateKthLargestCode(nums, k, language);
 
   return (
     <div className={`min-h-screen px-4 py-6 sm:px-6 lg:px-8 ${dark ? 'bg-slate-950' : 'bg-slate-50'}`}>

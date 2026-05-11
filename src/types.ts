@@ -50,7 +50,7 @@ export interface TrieState {
   memoryUsage: number;
 }
 
-export type Language = 'cpp' | 'python' | 'javascript';
+export type Language = 'cpp' | 'python' | 'javascript' | 'java' | 'csharp';
 
 export interface CodeGeneration {
   language: Language;

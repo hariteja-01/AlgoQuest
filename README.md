@@ -14,7 +14,7 @@ AlgoQuest is a cutting-edge, gamified web application designed to revolutionize 
 
 #### **Classic & Backtracking**
 - **N-Queens Visualizer**: 3D interactive chessboard with realistic shadows, backtracking exploration, and a full solution gallery.
-- **Word Ladder**: BFS-based word transformation explorer with **custom dictionary support** and bulk word import.
+- **Word Ladder**: BFS-based word transformation explorer with a curated built-in dictionary and clean ladder output.
 
 #### **Dynamic Programming (DP)**
 - **LCS (Longest Common Subsequence)**: 2D table visualization with path reconstruction and multi-string support.
@@ -40,10 +40,12 @@ AlgoQuest is a cutting-edge, gamified web application designed to revolutionize 
 
 ### 🎨 **Elite User Experience**
 - **Dark/Light Mode Support**: Professional, glassmorphic themes optimized for deep work and high visibility.
-- **Multi-language Code Generation**: Instant conversion of algorithm logic into clean **C++, Python, and JavaScript**.
+- **Multi-language Code Generation**: Instant conversion of algorithm logic into clean **C++, Python, JavaScript, Java, and C#**.
 - **Interactive Controls**: Play, pause, step-forward, and speed adjustment for every visualization.
 - **Responsive Architecture**: Seamlessly fluid design from ultra-wide monitors to mobile devices.
 - **Dynamic Dashboard**: Real-time stats and interactive cards for quick navigation.
+- **Guided Learning Path**: XP, streaks, and unlocks to structure your practice.
+- **Glossary**: Quick definitions for algorithms, data structures, and techniques.
 
 ---
 
@@ -69,6 +71,10 @@ AlgoQuest is a cutting-edge, gamified web application designed to revolutionize 
    ```
    Navigate to [http://localhost:5173](http://localhost:5173)
 
+### Optional: Supabase Setup (Profiles + Feedback)
+1. Copy .env.example to .env and add your Supabase keys.
+2. Apply migrations in supabase/migrations using the Supabase CLI.
+
 ---
 
 ## 🏗️ Project Architecture
@@ -87,6 +93,7 @@ AlgoQuest/
 │   ├── 📁 pages/                # Main Application Views
 │   ├── 🎯 App.tsx               # Router & Core Layout
 │   └── 🎨 index.css             # Tailwind & Global Styles
+├── 📁 supabase/                 # Supabase migrations
 ├── 📋 package.json              # Project Metadata
 ├── ⚙️ vite.config.ts           # Build System
 └── 🎨 tailwind.config.js       # Design System

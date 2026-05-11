@@ -1,144 +1,63 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
+  BookOpen,
   Check,
   ChevronDown,
-  Coins,
-  Crown,
-  Droplets,
-  Bug,
-  Egg,
-  FileText,
-  GitMerge,
+  Flame,
   Globe,
-  GraduationCap,
   Home,
   LayoutGrid,
+  Map,
   Menu,
-  Navigation,
-  Package,
-  PenTool,
+  MessageSquare,
   Settings2,
-  SlidersHorizontal,
-  Route,
-  Target,
-  TrendingUp,
-  TreePine,
+  Trophy,
+  UserRound,
   X,
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
+import { useAuth } from '../context/AuthContext';
 import { ThemeToggle } from './ThemeToggle';
 import { NavIcon } from './NavIcon';
+import { algorithmCategories, algorithms } from '../lib/algorithmCatalog';
+import { useLearning } from '../context/LearningContext';
+import FeedbackModal from './FeedbackModal';
+import ResetProgressModal from './ResetProgressModal';
+import UserPanel from './UserPanel';
 
-type MenuKey = 'desktop-visualizations' | 'desktop-settings' | 'mobile-visualizations' | null;
+type MenuKey = 'desktop-visualizations' | 'desktop-settings' | 'desktop-user' | 'mobile-visualizations' | null;
 
 // Navigation Layout Component
 const NavLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { theme, language, setLanguage } = useApp();
+  const { user, isAdmin } = useAuth();
+  const { streak, totalCompleted, totalAvailable } = useLearning();
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState<MenuKey>(null);
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const [resetOpen, setResetOpen] = useState(false);
   const desktopMenusRef = useRef<HTMLDivElement>(null);
   const desktopSettingsRef = useRef<HTMLDivElement>(null);
+  const desktopUserRef = useRef<HTMLDivElement>(null);
   const mobileMenusRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
 
-  const tabs = [
-    { 
-      title: 'Home', 
-      icon: Home, 
-      href: '/' 
-    },
-    { 
-      title: 'N-Queens', 
-      icon: Crown, 
-      href: '/nqueens' 
-    },
-    { 
-      title: 'LCS', 
-      icon: FileText, 
-      href: '/lcs' 
-    },
-    { 
-      title: 'Trie', 
-      icon: TreePine, 
-      href: '/trie' 
-    },
-    { 
-      title: 'Word Ladder', 
-      icon: Route, 
-      href: '/word-ladder' 
-    },
-    { 
-      title: 'Trapping Water', 
-      icon: Droplets, 
-      href: '/trapping-water' 
-    },
-    { 
-      title: 'Rotting Oranges', 
-      icon: Bug, 
-      href: '/rotting-oranges' 
-    },
-    { 
-      title: 'Super Egg Drop', 
-      icon: Egg, 
-      href: '/super-egg-drop' 
-    },
-    { 
-      title: 'Merge Intervals', 
-      icon: GitMerge, 
-      href: '/merge-intervals' 
-    },
-    { 
-      title: 'Sliding Window', 
-      icon: SlidersHorizontal, 
-      href: '/sliding-window' 
-    },
-    { 
-      title: 'Course Schedule', 
-      icon: GraduationCap, 
-      href: '/course-schedule' 
-    },
-    { 
-      title: 'Coin Change', 
-      icon: Coins, 
-      href: '/coin-change' 
-    },
-    { 
-      title: 'LIS', 
-      icon: TrendingUp, 
-      href: '/lis' 
-    },
-    { 
-      title: 'Dijkstra', 
-      icon: Navigation, 
-      href: '/dijkstra' 
-    },
-    { 
-      title: '0/1 Knapsack', 
-      icon: Package, 
-      href: '/knapsack' 
-    },
-    { 
-      title: 'Edit Distance', 
-      icon: PenTool, 
-      href: '/edit-distance' 
-    },
-    { 
-      title: 'Kth Largest', 
-      icon: Target, 
-      href: '/kth-largest' 
-    },
-  ];
+  const homeLink = { title: 'Home', icon: Home, href: '/' };
+  const HomeIcon = homeLink.icon;
+  const visualizationTabs = algorithms;
 
   const activeVisualization = useMemo(() => {
-    return tabs.find((tab) => tab.href === location.pathname) ?? null;
-  }, [location.pathname, tabs]);
+    return visualizationTabs.find((tab) => tab.path === location.pathname) ?? null;
+  }, [location.pathname, visualizationTabs]);
 
   const languages = [
     { value: 'javascript' as const, label: 'JavaScript' },
     { value: 'python' as const, label: 'Python' },
-    { value: 'cpp' as const, label: 'C++' }
+    { value: 'cpp' as const, label: 'C++' },
+    { value: 'java' as const, label: 'Java' },
+    { value: 'csharp' as const, label: 'C#' }
   ];
 
   useEffect(() => {
@@ -146,9 +65,10 @@ const NavLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       const target = event.target as Node;
       const clickedInsideDesktop = desktopMenusRef.current?.contains(target);
       const clickedInsideDesktopSettings = desktopSettingsRef.current?.contains(target);
+      const clickedInsideDesktopUser = desktopUserRef.current?.contains(target);
       const clickedInsideMobile = mobileMenusRef.current?.contains(target);
 
-      if (!clickedInsideDesktop && !clickedInsideDesktopSettings && !clickedInsideMobile) {
+      if (!clickedInsideDesktop && !clickedInsideDesktopSettings && !clickedInsideDesktopUser && !clickedInsideMobile) {
         setOpenMenu(null);
       }
     };
@@ -190,7 +110,7 @@ const NavLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             </motion.div>
 
             {/* Navigation Tabs - Center Section */}
-            <div className="flex justify-center">
+            <div className="flex justify-center items-center gap-2">
               <div ref={desktopMenusRef} className="relative flex items-center gap-3">
                 <div className="relative">
                   <motion.button
@@ -226,37 +146,95 @@ const NavLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                             Choose a problem view from the project library.
                           </p>
                         </div>
-                        <div className="space-y-1">
-                          {tabs.map((tab) => {
-                            const Icon = tab.icon;
-                            const isActive = location.pathname === tab.href;
+                        <div className="space-y-4">
+                          <div>
+                            <div className="px-3 py-2">
+                              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">
+                                Overview
+                              </p>
+                            </div>
+                            <Link
+                              to={homeLink.href}
+                              onClick={() => setOpenMenu(null)}
+                              className={`flex items-center gap-3 rounded-2xl px-3 py-3 transition-all duration-200 ${
+                                location.pathname === homeLink.href
+                                  ? 'bg-blue-50 text-blue-700 shadow-sm dark:bg-blue-950/40 dark:text-blue-200'
+                                  : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-200 dark:hover:bg-gray-800/80 dark:hover:text-white'
+                              }`}
+                            >
+                              <span className={`flex h-10 w-10 items-center justify-center rounded-2xl border ${
+                                location.pathname === homeLink.href
+                                  ? 'border-blue-200 bg-white shadow-sm dark:border-blue-500/30 dark:bg-gray-900'
+                                  : 'border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-950'
+                              }`}>
+                                <HomeIcon className="h-5 w-5" />
+                              </span>
+                              <span className="min-w-0 flex-1">
+                                <span className="block text-sm font-semibold">{homeLink.title}</span>
+                                <span className="block text-xs text-gray-500 dark:text-gray-400">
+                                  Project overview and launchpad
+                                </span>
+                              </span>
+                              {location.pathname === homeLink.href && (
+                                <Check className="h-4 w-4 flex-shrink-0 text-blue-600 dark:text-blue-300" />
+                              )}
+                            </Link>
+                          </div>
+
+                          {algorithmCategories.map((category, categoryIndex) => {
+                            const categoryAlgorithms = visualizationTabs.filter(
+                              (tab) => tab.category === category.id
+                            );
+
+                            if (categoryAlgorithms.length === 0) {
+                              return null;
+                            }
 
                             return (
-                              <Link
-                                key={tab.title}
-                                to={tab.href}
-                                onClick={() => setOpenMenu(null)}
-                                className={`flex items-center gap-3 rounded-2xl px-3 py-3 transition-all duration-200 ${
-                                  isActive
-                                    ? 'bg-blue-50 text-blue-700 shadow-sm dark:bg-blue-950/40 dark:text-blue-200'
-                                    : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-200 dark:hover:bg-gray-800/80 dark:hover:text-white'
-                                }`}
-                              >
-                                <span className={`flex h-10 w-10 items-center justify-center rounded-2xl border ${
-                                  isActive
-                                    ? 'border-blue-200 bg-white shadow-sm dark:border-blue-500/30 dark:bg-gray-900'
-                                    : 'border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-950'
-                                }`}>
-                                  <Icon className="h-5 w-5" />
-                                </span>
-                                <span className="min-w-0 flex-1">
-                                  <span className="block text-sm font-semibold">{tab.title}</span>
-                                  <span className="block text-xs text-gray-500 dark:text-gray-400">
-                                    Open the {tab.title.toLowerCase()} visualizer
-                                  </span>
-                                </span>
-                                {isActive && <Check className="h-4 w-4 flex-shrink-0 text-blue-600 dark:text-blue-300" />}
-                              </Link>
+                              <div key={category.id} className={categoryIndex === 0 ? '' : 'pt-2'}>
+                                <div className="px-3 py-2">
+                                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">
+                                    {category.label}
+                                  </p>
+                                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                    {category.description}
+                                  </p>
+                                </div>
+                                <div className="space-y-1">
+                                  {categoryAlgorithms.map((tab) => {
+                                    const Icon = tab.icon;
+                                    const isActive = location.pathname === tab.path;
+
+                                    return (
+                                      <Link
+                                        key={tab.id}
+                                        to={tab.path}
+                                        onClick={() => setOpenMenu(null)}
+                                        className={`flex items-center gap-3 rounded-2xl px-3 py-3 transition-all duration-200 ${
+                                          isActive
+                                            ? 'bg-blue-50 text-blue-700 shadow-sm dark:bg-blue-950/40 dark:text-blue-200'
+                                            : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-200 dark:hover:bg-gray-800/80 dark:hover:text-white'
+                                        }`}
+                                      >
+                                        <span className={`flex h-10 w-10 items-center justify-center rounded-2xl border ${
+                                          isActive
+                                            ? 'border-blue-200 bg-white shadow-sm dark:border-blue-500/30 dark:bg-gray-900'
+                                            : 'border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-950'
+                                        }`}>
+                                          <Icon className="h-5 w-5" />
+                                        </span>
+                                        <span className="min-w-0 flex-1">
+                                          <span className="block text-sm font-semibold">{tab.shortTitle}</span>
+                                          <span className="block text-xs text-gray-500 dark:text-gray-400">
+                                            {tab.tagline}
+                                          </span>
+                                        </span>
+                                        {isActive && <Check className="h-4 w-4 flex-shrink-0 text-blue-600 dark:text-blue-300" />}
+                                      </Link>
+                                    );
+                                  })}
+                                </div>
+                              </div>
                             );
                           })}
                         </div>
@@ -264,11 +242,101 @@ const NavLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                     )}
                   </AnimatePresence>
                 </div>
+
+                {/* Learning Path quick link */}
+                <Link
+                  to="/learning-path"
+                  className={`inline-flex items-center gap-2 rounded-2xl border px-3 py-2.5 text-sm font-semibold transition-all duration-200 ${
+                    location.pathname === '/learning-path'
+                      ? 'border-orange-200 bg-orange-50 text-orange-700 dark:border-orange-500/30 dark:bg-orange-950/40 dark:text-orange-200'
+                      : 'border-gray-200 bg-white/70 text-gray-700 hover:border-orange-200 hover:bg-orange-50/80 hover:text-orange-700 dark:border-gray-700 dark:bg-gray-900/70 dark:text-gray-200 dark:hover:border-orange-500/30'
+                  }`}
+                >
+                  <Map className="h-4 w-4" />
+                  <span className="hidden xl:inline">Path</span>
+                  {streak.currentStreak > 0 && (
+                    <span className="flex items-center gap-0.5 rounded-full bg-orange-500 px-1.5 py-0.5 text-[10px] font-bold text-white">
+                      <Flame className="h-2.5 w-2.5" />{streak.currentStreak}
+                    </span>
+                  )}
+                </Link>
+
+                {/* Glossary quick link */}
+                <Link
+                  to="/glossary"
+                  className={`inline-flex items-center gap-2 rounded-2xl border px-3 py-2.5 text-sm font-semibold transition-all duration-200 ${
+                    location.pathname === '/glossary'
+                      ? 'border-purple-200 bg-purple-50 text-purple-700 dark:border-purple-500/30 dark:bg-purple-950/40 dark:text-purple-200'
+                      : 'border-gray-200 bg-white/70 text-gray-700 hover:border-purple-200 hover:bg-purple-50/80 hover:text-purple-700 dark:border-gray-700 dark:bg-gray-900/70 dark:text-gray-200 dark:hover:border-purple-500/30'
+                  }`}
+                >
+                  <BookOpen className="h-4 w-4" />
+                  <span className="hidden xl:inline">Glossary</span>
+                </Link>
+
+                {/* XP / Progress pill */}
+                <div className="hidden xl:flex items-center gap-1.5 rounded-2xl border border-yellow-300/30 bg-yellow-500/10 px-3 py-2 text-xs font-bold text-yellow-400">
+                  <Trophy className="h-3.5 w-3.5" />
+                  {totalCompleted}/{totalAvailable}
+                </div>
               </div>
             </div>
 
             {/* Settings - Right Section */}
-            <div className="flex items-center justify-end">
+            <div className="flex items-center justify-end gap-3">
+              <div className="relative" ref={desktopUserRef}>
+                <motion.button
+                  type="button"
+                  whileHover={{ y: -1 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => toggleMenu('desktop-user')}
+                  className={`${desktopMenuButtonClass} ${
+                    openMenu === 'desktop-user'
+                      ? 'border-emerald-200 bg-emerald-50 text-emerald-700 shadow-lg shadow-emerald-500/10 dark:border-emerald-500/30 dark:bg-emerald-950/40 dark:text-emerald-200'
+                      : 'border-gray-200 bg-white/70 text-gray-700 hover:border-emerald-200 hover:bg-emerald-50/80 hover:text-emerald-700 dark:border-gray-700 dark:bg-gray-900/70 dark:text-gray-200 dark:hover:border-emerald-500/30 dark:hover:bg-emerald-950/40'
+                  }`}
+                >
+                  <UserRound className="h-4 w-4" />
+                  <span>User</span>
+                  <ChevronDown className={`h-4 w-4 transition-transform ${openMenu === 'desktop-user' ? 'rotate-180' : ''}`} />
+                </motion.button>
+
+                <AnimatePresence>
+                  {openMenu === 'desktop-user' && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -8, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -8, scale: 0.98 }}
+                      transition={{ duration: 0.18 }}
+                      className={`${dropdownPanelClass} right-0 top-full w-[24rem] border-gray-200/70 bg-white/95 p-3 dark:border-gray-700/70 dark:bg-gray-900/95`}
+                    >
+                      <div className="px-2 py-1">
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">
+                          User Information
+                        </p>
+                        <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                          Secure login with Supabase and profile storage.
+                        </p>
+                      </div>
+                      <div className="mt-3">
+                        <UserPanel onClose={() => setOpenMenu(null)} />
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              <motion.button
+                type="button"
+                whileHover={{ y: -1 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setFeedbackOpen(true)}
+                className={`${desktopMenuButtonClass} border-fuchsia-200 bg-fuchsia-50 text-fuchsia-700 shadow-lg shadow-fuchsia-500/10 dark:border-fuchsia-500/30 dark:bg-fuchsia-950/40 dark:text-fuchsia-200`}
+              >
+                <MessageSquare className="h-4 w-4" />
+                <span>Feedback</span>
+              </motion.button>
+
               <div className="relative" ref={desktopSettingsRef}>
                 <motion.button
                   type="button"
@@ -344,6 +412,43 @@ const NavLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                             <ThemeToggle />
                           </div>
                         </div>
+
+                        <div className="rounded-2xl border border-gray-200/80 bg-gray-50/80 p-3 dark:border-gray-700/80 dark:bg-gray-800/60">
+                          <div className="flex items-start justify-between gap-4">
+                            <div>
+                              <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">Learning Progress</p>
+                              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                Reset streaks, XP, and unlocks.
+                              </p>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => setResetOpen(true)}
+                              disabled={!user}
+                              className={`rounded-xl border px-3 py-2 text-xs font-semibold transition-all ${
+                                user
+                                  ? 'border-amber-300 bg-amber-50 text-amber-700 dark:border-amber-500/40 dark:bg-amber-950/40 dark:text-amber-200'
+                                  : 'border-gray-200 bg-gray-100 text-gray-400 dark:border-gray-700 dark:bg-gray-900/70 dark:text-gray-500'
+                              }`}
+                            >
+                              Reset
+                            </button>
+                          </div>
+                        </div>
+
+                        {isAdmin && (
+                          <div className="rounded-2xl border border-gray-200/80 bg-gray-50/80 p-3 dark:border-gray-700/80 dark:bg-gray-800/60">
+                            <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">Admin Tools</p>
+                            <Link
+                              to="/admin/feedback"
+                              onClick={() => setOpenMenu(null)}
+                              className="mt-3 inline-flex w-full items-center justify-between rounded-xl border border-fuchsia-200 bg-fuchsia-50 px-3 py-2 text-xs font-semibold text-fuchsia-700 dark:border-fuchsia-500/30 dark:bg-fuchsia-950/40 dark:text-fuchsia-200"
+                            >
+                              Feedback Inbox
+                              <MessageSquare className="h-4 w-4" />
+                            </Link>
+                          </div>
+                        )}
                       </div>
                     </motion.div>
                   )}
@@ -381,7 +486,21 @@ const NavLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               </span>
             </div>
           </div>
-          <ThemeToggle className="scale-90" />
+          <div className="flex items-center gap-3">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setFeedbackOpen(true)}
+              className={`p-2 rounded-lg transition-colors ${
+                theme === 'dark'
+                  ? 'hover:bg-gray-800 text-fuchsia-300 hover:text-fuchsia-200'
+                  : 'hover:bg-gray-100 text-fuchsia-600 hover:text-fuchsia-700'
+              }`}
+            >
+              <MessageSquare className="h-5 w-5" />
+            </motion.button>
+            <ThemeToggle className="scale-90" />
+          </div>
         </div>
 
         {/* Mobile Navigation Dropdown */}
@@ -405,7 +524,7 @@ const NavLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 <span className="text-left">
                   <span className="block">Visualizations</span>
                   <span className="block text-xs font-normal text-gray-500 dark:text-gray-400">
-                    {activeVisualization ? activeVisualization.title : 'Choose a view'}
+                    {activeVisualization ? activeVisualization.shortTitle : 'Choose a view'}
                   </span>
                 </span>
               </span>
@@ -426,37 +545,95 @@ const NavLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                       Visualizations
                     </p>
                   </div>
-                  <div className="space-y-1">
-                    {tabs.map((tab) => {
-                      const Icon = tab.icon;
-                      const isActive = location.pathname === tab.href;
+                  <div className="space-y-4">
+                    <div>
+                      <div className="px-3 py-2">
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">
+                          Overview
+                        </p>
+                      </div>
+                      <Link
+                        to={homeLink.href}
+                        onClick={() => setOpenMenu(null)}
+                        className={`flex items-center gap-3 rounded-2xl px-3 py-3 transition-all duration-200 ${
+                          location.pathname === homeLink.href
+                            ? 'bg-blue-50 text-blue-700 shadow-sm dark:bg-blue-950/40 dark:text-blue-200'
+                            : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-200 dark:hover:bg-gray-800/80 dark:hover:text-white'
+                        }`}
+                      >
+                        <span className={`flex h-9 w-9 items-center justify-center rounded-xl border ${
+                          location.pathname === homeLink.href
+                            ? 'border-blue-200 bg-white shadow-sm dark:border-blue-500/30 dark:bg-gray-900'
+                            : 'border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-950'
+                        }`}>
+                          <HomeIcon className="h-4 w-4" />
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block text-sm font-semibold">{homeLink.title}</span>
+                          <span className="block text-xs text-gray-500 dark:text-gray-400">
+                            Project overview and launchpad
+                          </span>
+                        </span>
+                        {location.pathname === homeLink.href && (
+                          <Check className="h-4 w-4 flex-shrink-0 text-blue-600 dark:text-blue-300" />
+                        )}
+                      </Link>
+                    </div>
+
+                    {algorithmCategories.map((category, categoryIndex) => {
+                      const categoryAlgorithms = visualizationTabs.filter(
+                        (tab) => tab.category === category.id
+                      );
+
+                      if (categoryAlgorithms.length === 0) {
+                        return null;
+                      }
 
                       return (
-                        <Link
-                          key={tab.title}
-                          to={tab.href}
-                          onClick={() => setOpenMenu(null)}
-                          className={`flex items-center gap-3 rounded-2xl px-3 py-3 transition-all duration-200 ${
-                            isActive
-                              ? 'bg-blue-50 text-blue-700 shadow-sm dark:bg-blue-950/40 dark:text-blue-200'
-                              : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-200 dark:hover:bg-gray-800/80 dark:hover:text-white'
-                          }`}
-                        >
-                          <span className={`flex h-9 w-9 items-center justify-center rounded-xl border ${
-                            isActive
-                              ? 'border-blue-200 bg-white shadow-sm dark:border-blue-500/30 dark:bg-gray-900'
-                              : 'border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-950'
-                          }`}>
-                            <Icon className="h-4 w-4" />
-                          </span>
-                          <span className="min-w-0 flex-1">
-                            <span className="block text-sm font-semibold">{tab.title}</span>
-                            <span className="block text-xs text-gray-500 dark:text-gray-400">
-                              Open the {tab.title.toLowerCase()} visualizer
-                            </span>
-                          </span>
-                          {isActive && <Check className="h-4 w-4 flex-shrink-0 text-blue-600 dark:text-blue-300" />}
-                        </Link>
+                        <div key={category.id} className={categoryIndex === 0 ? '' : 'pt-2'}>
+                          <div className="px-3 py-2">
+                            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">
+                              {category.label}
+                            </p>
+                            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                              {category.description}
+                            </p>
+                          </div>
+                          <div className="space-y-1">
+                            {categoryAlgorithms.map((tab) => {
+                              const Icon = tab.icon;
+                              const isActive = location.pathname === tab.path;
+
+                              return (
+                                <Link
+                                  key={tab.id}
+                                  to={tab.path}
+                                  onClick={() => setOpenMenu(null)}
+                                  className={`flex items-center gap-3 rounded-2xl px-3 py-3 transition-all duration-200 ${
+                                    isActive
+                                      ? 'bg-blue-50 text-blue-700 shadow-sm dark:bg-blue-950/40 dark:text-blue-200'
+                                      : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-200 dark:hover:bg-gray-800/80 dark:hover:text-white'
+                                  }`}
+                                >
+                                  <span className={`flex h-9 w-9 items-center justify-center rounded-xl border ${
+                                    isActive
+                                      ? 'border-blue-200 bg-white shadow-sm dark:border-blue-500/30 dark:bg-gray-900'
+                                      : 'border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-950'
+                                  }`}>
+                                    <Icon className="h-4 w-4" />
+                                  </span>
+                                  <span className="min-w-0 flex-1">
+                                    <span className="block text-sm font-semibold">{tab.shortTitle}</span>
+                                    <span className="block text-xs text-gray-500 dark:text-gray-400">
+                                      {tab.tagline}
+                                    </span>
+                                  </span>
+                                  {isActive && <Check className="h-4 w-4 flex-shrink-0 text-blue-600 dark:text-blue-300" />}
+                                </Link>
+                              );
+                            })}
+                          </div>
+                        </div>
                       );
                     })}
                   </div>
@@ -556,6 +733,94 @@ const NavLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                         <ThemeToggle />
                       </div>
                     </div>
+
+                    <div>
+                      <h3 className={`text-sm font-semibold mb-3 ${
+                        theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                      }`}>
+                        User Information
+                      </h3>
+                      <UserPanel variant="sidebar" onClose={() => setMobileSidebarOpen(false)} />
+                    </div>
+
+                    {/* Learning Path link */}
+                    <Link
+                      to="/learning-path"
+                      onClick={() => setMobileSidebarOpen(false)}
+                      className={`w-full rounded-2xl border px-4 py-3 text-sm font-semibold transition-all duration-200 flex items-center gap-2 ${
+                        theme === 'dark'
+                          ? 'border-orange-500/40 bg-orange-950/40 text-orange-200'
+                          : 'border-orange-200 bg-orange-50 text-orange-700'
+                      }`}
+                    >
+                      <Map className="h-4 w-4" />
+                      Learning Path
+                      {streak.currentStreak > 0 && (
+                        <span className="ml-auto flex items-center gap-0.5 rounded-full bg-orange-500 px-2 py-0.5 text-[10px] font-bold text-white">
+                          <Flame className="h-2.5 w-2.5" />{streak.currentStreak}
+                        </span>
+                      )}
+                    </Link>
+
+                    {/* Glossary link */}
+                    <Link
+                      to="/glossary"
+                      onClick={() => setMobileSidebarOpen(false)}
+                      className={`w-full rounded-2xl border px-4 py-3 text-sm font-semibold transition-all duration-200 flex items-center gap-2 ${
+                        theme === 'dark'
+                          ? 'border-purple-500/40 bg-purple-950/40 text-purple-200'
+                          : 'border-purple-200 bg-purple-50 text-purple-700'
+                      }`}
+                    >
+                      <BookOpen className="h-4 w-4" />
+                      Glossary
+                    </Link>
+
+                    <button
+                      type="button"
+                      onClick={() => setResetOpen(true)}
+                      disabled={!user}
+                      className={`w-full rounded-2xl border px-4 py-3 text-sm font-semibold transition-all duration-200 flex items-center gap-2 ${
+                        user
+                          ? theme === 'dark'
+                            ? 'border-amber-500/40 bg-amber-950/40 text-amber-200'
+                            : 'border-amber-200 bg-amber-50 text-amber-700'
+                          : theme === 'dark'
+                            ? 'border-gray-700 bg-gray-900/70 text-gray-500'
+                            : 'border-gray-200 bg-gray-100 text-gray-400'
+                      }`}
+                    >
+                      Reset Progress
+                    </button>
+
+                    {isAdmin && (
+                      <Link
+                        to="/admin/feedback"
+                        onClick={() => setMobileSidebarOpen(false)}
+                        className={`w-full rounded-2xl border px-4 py-3 text-sm font-semibold transition-all duration-200 flex items-center gap-2 ${
+                          theme === 'dark'
+                            ? 'border-fuchsia-500/40 bg-fuchsia-950/40 text-fuchsia-200'
+                            : 'border-fuchsia-200 bg-fuchsia-50 text-fuchsia-700'
+                        }`}
+                      >
+                        <MessageSquare className="h-4 w-4" />
+                        Feedback Inbox
+                      </Link>
+                    )}
+
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => setFeedbackOpen(true)}
+                      className={`w-full rounded-2xl border px-4 py-3 text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 ${
+                        theme === 'dark'
+                          ? 'border-fuchsia-500/40 bg-fuchsia-950/40 text-fuchsia-200'
+                          : 'border-fuchsia-200 bg-fuchsia-50 text-fuchsia-700'
+                      }`}
+                    >
+                      <MessageSquare className="h-4 w-4" />
+                      Send Feedback
+                    </motion.button>
                   </div>
                 </div>
 
@@ -577,6 +842,17 @@ const NavLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <main className="flex-1">
         {children}
       </main>
+
+      <FeedbackModal
+        isOpen={feedbackOpen}
+        onClose={() => setFeedbackOpen(false)}
+        currentPage={location.pathname}
+      />
+
+      <ResetProgressModal
+        isOpen={resetOpen}
+        onClose={() => setResetOpen(false)}
+      />
     </div>
   );
 };

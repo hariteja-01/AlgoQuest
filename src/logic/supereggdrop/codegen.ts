@@ -48,6 +48,52 @@ function superEggDrop(K, N) {
     return result;
 }
 console.log(superEggDrop(2, 6)); // 3`,
+    java: `class Solution {
+    // Naive Recursion — O(N^K) exponential
+    public int superEggDrop(int K, int N) {
+        if (N <= 1 || K == 1) return N;
+        int result = Integer.MAX_VALUE;
+        for (int x = 1; x <= N; x++) {
+            int worst = 1 + Math.max(
+                superEggDrop(K - 1, x - 1),
+                superEggDrop(K, N - x)
+            );
+            result = Math.min(result, worst);
+        }
+        return result;
+    }
+}
+
+class Demo {
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        System.out.println(solution.superEggDrop(2, 6));
+    }
+}`,
+    csharp: `using System;
+
+public class Solution {
+    // Naive Recursion — O(N^K) exponential
+    public int SuperEggDrop(int K, int N) {
+        if (N <= 1 || K == 1) return N;
+        int result = int.MaxValue;
+        for (int x = 1; x <= N; x++) {
+            int worst = 1 + Math.Max(
+                SuperEggDrop(K - 1, x - 1),
+                SuperEggDrop(K, N - x)
+            );
+            result = Math.Min(result, worst);
+        }
+        return result;
+    }
+}
+
+public class Demo {
+    public static void Main() {
+        var solution = new Solution();
+        Console.WriteLine(solution.SuperEggDrop(2, 6));
+    }
+}`,
   },
   dp: {
     cpp: `#include <vector>
@@ -97,6 +143,56 @@ function superEggDrop(K, N) {
     return dp[K][N];
 }
 console.log(superEggDrop(2, 10)); // 4`,
+    java: `class Solution {
+    // DP — O(KN^2) time, O(KN) space
+    public int superEggDrop(int K, int N) {
+        int[][] dp = new int[K + 1][N + 1];
+        for (int j = 1; j <= N; j++) dp[1][j] = j;
+        for (int i = 1; i <= K; i++) dp[i][1] = 1;
+        for (int i = 2; i <= K; i++) {
+            for (int j = 2; j <= N; j++) {
+                dp[i][j] = Integer.MAX_VALUE;
+                for (int x = 1; x <= j; x++) {
+                    dp[i][j] = Math.min(dp[i][j], 1 + Math.max(dp[i - 1][x - 1], dp[i][j - x]));
+                }
+            }
+        }
+        return dp[K][N];
+    }
+}
+
+class Demo {
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        System.out.println(solution.superEggDrop(2, 10));
+    }
+}`,
+    csharp: `using System;
+
+public class Solution {
+    // DP — O(KN^2) time, O(KN) space
+    public int SuperEggDrop(int K, int N) {
+        int[,] dp = new int[K + 1, N + 1];
+        for (int j = 1; j <= N; j++) dp[1, j] = j;
+        for (int i = 1; i <= K; i++) dp[i, 1] = 1;
+        for (int i = 2; i <= K; i++) {
+            for (int j = 2; j <= N; j++) {
+                dp[i, j] = int.MaxValue;
+                for (int x = 1; x <= j; x++) {
+                    dp[i, j] = Math.Min(dp[i, j], 1 + Math.Max(dp[i - 1, x - 1], dp[i, j - x]));
+                }
+            }
+        }
+        return dp[K, N];
+    }
+}
+
+public class Demo {
+    public static void Main() {
+        var solution = new Solution();
+        Console.WriteLine(solution.SuperEggDrop(2, 10));
+    }
+}`,
   },
   dpBinarySearch: {
     cpp: `#include <vector>
@@ -161,6 +257,66 @@ function superEggDrop(K, N) {
     return dp[K][N];
 }
 console.log(superEggDrop(2, 100)); // 14`,
+    java: `class Solution {
+    // DP + Binary Search — O(KN log N)
+    public int superEggDrop(int K, int N) {
+        int[][] dp = new int[K + 1][N + 1];
+        for (int j = 1; j <= N; j++) dp[1][j] = j;
+        for (int i = 1; i <= K; i++) dp[i][1] = 1;
+        for (int i = 2; i <= K; i++) {
+            for (int j = 2; j <= N; j++) {
+                int lo = 1, hi = j;
+                dp[i][j] = Integer.MAX_VALUE;
+                while (lo <= hi) {
+                    int mid = (lo + hi) / 2;
+                    int brk = dp[i - 1][mid - 1];
+                    int surv = dp[i][j - mid];
+                    dp[i][j] = Math.min(dp[i][j], 1 + Math.max(brk, surv));
+                    if (brk < surv) lo = mid + 1; else hi = mid - 1;
+                }
+            }
+        }
+        return dp[K][N];
+    }
+}
+
+class Demo {
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        System.out.println(solution.superEggDrop(2, 100));
+    }
+}`,
+    csharp: `using System;
+
+public class Solution {
+    // DP + Binary Search — O(KN log N)
+    public int SuperEggDrop(int K, int N) {
+        int[,] dp = new int[K + 1, N + 1];
+        for (int j = 1; j <= N; j++) dp[1, j] = j;
+        for (int i = 1; i <= K; i++) dp[i, 1] = 1;
+        for (int i = 2; i <= K; i++) {
+            for (int j = 2; j <= N; j++) {
+                int lo = 1, hi = j;
+                dp[i, j] = int.MaxValue;
+                while (lo <= hi) {
+                    int mid = (lo + hi) / 2;
+                    int brk = dp[i - 1, mid - 1];
+                    int surv = dp[i, j - mid];
+                    dp[i, j] = Math.Min(dp[i, j], 1 + Math.Max(brk, surv));
+                    if (brk < surv) lo = mid + 1; else hi = mid - 1;
+                }
+            }
+        }
+        return dp[K, N];
+    }
+}
+
+public class Demo {
+    public static void Main() {
+        var solution = new Solution();
+        Console.WriteLine(solution.SuperEggDrop(2, 100));
+    }
+}`,
   },
   movesBased: {
     cpp: `#include <vector>
@@ -200,6 +356,50 @@ function superEggDrop(K, N) {
     return m;
 }
 console.log(superEggDrop(2, 100)); // 14`,
+    java: `class Solution {
+    // Moves-based DP — O(K·result)
+    public int superEggDrop(int K, int N) {
+        int[][] dp = new int[N + 1][K + 1];
+        int m = 0;
+        while (dp[m][K] < N) {
+            m++;
+            for (int k = 1; k <= K; k++) {
+                dp[m][k] = dp[m - 1][k - 1] + dp[m - 1][k] + 1;
+            }
+        }
+        return m;
+    }
+}
+
+class Demo {
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        System.out.println(solution.superEggDrop(2, 100));
+    }
+}`,
+    csharp: `using System;
+
+public class Solution {
+    // Moves-based DP — O(K·result)
+    public int SuperEggDrop(int K, int N) {
+        int[,] dp = new int[N + 1, K + 1];
+        int m = 0;
+        while (dp[m, K] < N) {
+            m++;
+            for (int k = 1; k <= K; k++) {
+                dp[m, k] = dp[m - 1, k - 1] + dp[m - 1, k] + 1;
+            }
+        }
+        return m;
+    }
+}
+
+public class Demo {
+    public static void Main() {
+        var solution = new Solution();
+        Console.WriteLine(solution.SuperEggDrop(2, 100));
+    }
+}`,
   },
 };
 

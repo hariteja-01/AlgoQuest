@@ -38,6 +38,58 @@ function lengthOfLIS(nums) {
     return Math.max(...dp);
 }
 console.log(lengthOfLIS([10,9,2,5,3,7,101,18])); // 4`,
+  java: `import java.util.*;
+
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        int n = nums.length;
+        int[] dp = new int[n];
+        Arrays.fill(dp, 1);
+        int best = 0;
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                if (nums[j] < nums[i]) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
+            }
+            best = Math.max(best, dp[i]);
+        }
+        for (int value : dp) best = Math.max(best, value);
+        return best;
+    }
+}
+
+class Demo {
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        System.out.println(solution.lengthOfLIS(new int[]{10,9,2,5,3,7,101,18}));
+    }
+}`,
+  csharp: `using System;
+
+public class Solution {
+    public int LengthOfLIS(int[] nums) {
+        int n = nums.Length;
+        int[] dp = new int[n];
+        for (int i = 0; i < n; i++) dp[i] = 1;
+        int best = 0;
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                if (nums[j] < nums[i]) dp[i] = Math.Max(dp[i], dp[j] + 1);
+            }
+            best = Math.Max(best, dp[i]);
+        }
+        foreach (int val in dp) best = Math.Max(best, val);
+        return best;
+    }
+}
+
+public class Demo {
+    public static void Main() {
+        var solution = new Solution();
+        Console.WriteLine(solution.LengthOfLIS(new int[]{10,9,2,5,3,7,101,18}));
+    }
+}`,
 };
 
 const patienceCode: Record<Language, string> = {
@@ -84,6 +136,53 @@ function lengthOfLIS(nums) {
     return tails.length;
 }
 console.log(lengthOfLIS([10,9,2,5,3,7,101,18])); // 4`,
+  java: `import java.util.*;
+
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        int[] tails = new int[nums.length];
+        int size = 0;
+        for (int x : nums) {
+            int i = Arrays.binarySearch(tails, 0, size, x);
+            if (i < 0) i = -(i + 1);
+            tails[i] = x;
+            if (i == size) size++;
+        }
+        return size;
+    }
+}
+
+class Demo {
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        System.out.println(solution.lengthOfLIS(new int[]{10,9,2,5,3,7,101,18}));
+    }
+}`,
+  csharp: `using System;
+
+public class Solution {
+    public int LengthOfLIS(int[] nums) {
+        int[] tails = new int[nums.Length];
+        int size = 0;
+        foreach (int x in nums) {
+            int lo = 0, hi = size;
+            while (lo < hi) {
+                int mid = (lo + hi) >> 1;
+                if (tails[mid] < x) lo = mid + 1; else hi = mid;
+            }
+            tails[lo] = x;
+            if (lo == size) size++;
+        }
+        return size;
+    }
+}
+
+public class Demo {
+    public static void Main() {
+        var solution = new Solution();
+        Console.WriteLine(solution.LengthOfLIS(new int[]{10,9,2,5,3,7,101,18}));
+    }
+}`,
 };
 
 export const generateLISCode = (approach: LISApproach, language: Language): string => {

@@ -1,6 +1,8 @@
 import { Language } from '../../types';
 
-export const generateEditDistanceCode = (language: Language): string => {
+export const generateEditDistanceCode = (word1: string, word2: string, language: Language): string => {
+    const safeWord1 = word1 || 'horse';
+    const safeWord2 = word2 || 'ros';
   if (language === 'cpp') return `#include <string>
 #include <vector>
 #include <algorithm>
@@ -20,6 +22,62 @@ int minDistance(string word1, string word2) {
                 dp[i][j] = 1 + min({dp[i-1][j], dp[i][j-1], dp[i-1][j-1]});
         }
     return dp[m][n];
+}
+
+int main() {
+    string word1 = "${safeWord1}";
+    string word2 = "${safeWord2}";
+    int result = minDistance(word1, word2);
+    return 0;
+}`;
+  if (language === 'java') return `class Solution {
+    public int minDistance(String word1, String word2) {
+        int m = word1.length(), n = word2.length();
+        int[][] dp = new int[m + 1][n + 1];
+        for (int i = 0; i <= m; i++) dp[i][0] = i;
+        for (int j = 0; j <= n; j++) dp[0][j] = j;
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = 1 + Math.min(dp[i - 1][j], Math.min(dp[i][j - 1], dp[i - 1][j - 1]));
+                }
+            }
+        }
+        return dp[m][n];
+    }
+}
+
+class Demo {
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        System.out.println(solution.minDistance("${safeWord1}", "${safeWord2}"));
+    }
+}`;
+  if (language === 'csharp') return `using System;
+
+public class Solution {
+    public int MinDistance(string word1, string word2) {
+        int m = word1.Length, n = word2.Length;
+        int[,] dp = new int[m + 1, n + 1];
+        for (int i = 0; i <= m; i++) dp[i, 0] = i;
+        for (int j = 0; j <= n; j++) dp[0, j] = j;
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (word1[i - 1] == word2[j - 1]) dp[i, j] = dp[i - 1, j - 1];
+                else dp[i, j] = 1 + Math.Min(dp[i - 1, j], Math.Min(dp[i, j - 1], dp[i - 1, j - 1]));
+            }
+        }
+        return dp[m, n];
+    }
+}
+
+public class Demo {
+    public static void Main() {
+        var solution = new Solution();
+        Console.WriteLine(solution.MinDistance("${safeWord1}", "${safeWord2}"));
+    }
 }`;
   if (language === 'python') return `# Edit Distance — O(mn) DP
 def minDistance(word1, word2):
@@ -35,7 +93,7 @@ def minDistance(word1, word2):
                 dp[i][j] = 1 + min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1])
     return dp[m][n]
 
-print(minDistance("horse", "ros"))  # 3`;
+print(minDistance("${safeWord1}", "${safeWord2}"))`;
   return `// Edit Distance — O(mn) DP
 function minDistance(word1, word2) {
     const m = word1.length, n = word2.length;
@@ -51,5 +109,5 @@ function minDistance(word1, word2) {
         }
     return dp[m][n];
 }
-console.log(minDistance("horse", "ros")); // 3`;
+console.log(minDistance("${safeWord1}", "${safeWord2}"));`;
 };

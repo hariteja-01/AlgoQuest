@@ -37,7 +37,7 @@ const CoinChange: React.FC = () => {
 
   const current = steps[stepIdx] || steps[0];
   const dp = current?.dp ?? [];
-  const code = generateCoinChangeCode(language);
+  const code = generateCoinChangeCode(coins, amount, language);
 
   const COIN_COLORS = ['from-amber-400 to-yellow-500', 'from-slate-300 to-slate-400', 'from-amber-600 to-orange-600', 'from-yellow-300 to-amber-400'];
 

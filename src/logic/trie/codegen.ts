@@ -285,6 +285,150 @@ ${operations.map(op => `trie.${op};`).join('\n')}
 console.log("Trie operations completed successfully!");
 console.log("Memory stats:", trie.getMemoryStats());`;
 
+    case 'java':
+      return `import java.util.*;
+
+class TrieNode {
+    Map<Character, TrieNode> children = new HashMap<>();
+    boolean isEndOfWord = false;
+}
+
+class Trie {
+    private final TrieNode root = new TrieNode();
+
+    public void insert(String word) {
+        TrieNode current = root;
+        for (char c : word.toCharArray()) {
+            current.children.putIfAbsent(c, new TrieNode());
+            current = current.children.get(c);
+        }
+        current.isEndOfWord = true;
+    }
+
+    public boolean search(String word) {
+        TrieNode current = root;
+        for (char c : word.toCharArray()) {
+            TrieNode next = current.children.get(c);
+            if (next == null) return false;
+            current = next;
+        }
+        return current.isEndOfWord;
+    }
+
+    public boolean startsWith(String prefix) {
+        TrieNode current = root;
+        for (char c : prefix.toCharArray()) {
+            TrieNode next = current.children.get(c);
+            if (next == null) return false;
+            current = next;
+        }
+        return true;
+    }
+
+    public List<String> getSuggestions(String prefix) {
+        List<String> suggestions = new ArrayList<>();
+        TrieNode current = root;
+        for (char c : prefix.toCharArray()) {
+            TrieNode next = current.children.get(c);
+            if (next == null) return suggestions;
+            current = next;
+        }
+        collectWords(current, new StringBuilder(prefix), suggestions);
+        return suggestions;
+    }
+
+    private void collectWords(TrieNode node, StringBuilder prefix, List<String> results) {
+        if (node.isEndOfWord) results.add(prefix.toString());
+        for (Map.Entry<Character, TrieNode> entry : node.children.entrySet()) {
+            prefix.append(entry.getKey());
+            collectWords(entry.getValue(), prefix, results);
+            prefix.deleteCharAt(prefix.length() - 1);
+        }
+    }
+}
+
+class Demo {
+    public static void main(String[] args) {
+        Trie trie = new Trie();
+
+        // Example operations
+        ${operations.map(op => `trie.${op};`).join('\n        ')}
+
+        System.out.println("Trie operations completed successfully!");
+    }
+}`;
+
+    case 'csharp':
+      return `using System;
+using System.Collections.Generic;
+
+public class TrieNode {
+    public Dictionary<char, TrieNode> Children = new();
+    public bool IsEndOfWord = false;
+}
+
+public class Trie {
+    private readonly TrieNode root = new();
+
+    public void Insert(string word) {
+        var current = root;
+        foreach (char c in word) {
+            if (!current.Children.ContainsKey(c)) {
+                current.Children[c] = new TrieNode();
+            }
+            current = current.Children[c];
+        }
+        current.IsEndOfWord = true;
+    }
+
+    public bool Search(string word) {
+        var current = root;
+        foreach (char c in word) {
+            if (!current.Children.TryGetValue(c, out var next)) return false;
+            current = next;
+        }
+        return current.IsEndOfWord;
+    }
+
+    public bool StartsWith(string prefix) {
+        var current = root;
+        foreach (char c in prefix) {
+            if (!current.Children.TryGetValue(c, out var next)) return false;
+            current = next;
+        }
+        return true;
+    }
+
+    public List<string> GetSuggestions(string prefix) {
+        var results = new List<string>();
+        var current = root;
+        foreach (char c in prefix) {
+            if (!current.Children.TryGetValue(c, out var next)) return results;
+            current = next;
+        }
+        CollectWords(current, prefix, results);
+        return results;
+    }
+
+    private void CollectWords(TrieNode node, string prefix, List<string> results) {
+        if (node.IsEndOfWord) results.Add(prefix);
+        foreach (var entry in node.Children) {
+            CollectWords(entry.Value, prefix + entry.Key, results);
+        }
+    }
+}
+
+public class Demo {
+    public static void Main() {
+        var trie = new Trie();
+
+        // Example operations
+        ${operations.map(op => `trie.${op};`).join('\n        ')}
+
+        Console.WriteLine("Trie operations completed successfully!");
+    }
+}`;
+
     default:
       return '';
   }

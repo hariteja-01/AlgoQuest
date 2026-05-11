@@ -40,7 +40,7 @@ const Dijkstra: React.FC = () => {
   }, [playing, stepIdx, steps.length, speed]);
 
   const current = steps[stepIdx] || steps[0];
-  const code = generateDijkstraCode(language);
+  const code = generateDijkstraCode(config.nodes, config.edges, config.source, language);
 
   const nodePositions = useMemo(() => {
     const n = config.nodes;

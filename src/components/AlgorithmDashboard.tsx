@@ -1,49 +1,34 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Crown, FileText, TreePine, Code2, Play, BarChart3, Zap, Star } from 'lucide-react';
+import { Code2, Play, BarChart3, Zap, Star } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { algorithms, algorithmStats } from '../lib/algorithmCatalog';
 
 export const AlgorithmDashboard: React.FC = () => {
   const { theme } = useApp();
 
-  const algorithms = [
-    {
-      icon: Crown,
-      name: 'N-Queens',
-      description: 'Backtracking Algorithm',
-      complexity: 'O(N!)',
-      status: 'Active',
-      progress: 85,
-      color: 'from-purple-500 to-pink-500',
-      bgColor: 'bg-purple-500/10'
-    },
-    {
-      icon: FileText,
-      name: 'LCS',
-      description: 'Dynamic Programming',
-      complexity: 'O(m×n)',
-      status: 'Learning',
-      progress: 92,
-      color: 'from-blue-500 to-cyan-500',
-      bgColor: 'bg-blue-500/10'
-    },
-    {
-      icon: TreePine,
-      name: 'Trie',
-      description: 'Tree Data Structure',
-      complexity: 'O(m)',
-      status: 'Mastered',
-      progress: 100,
-      color: 'from-green-500 to-emerald-500',
-      bgColor: 'bg-green-500/10'
-    }
-  ];
+  const fallbackStatuses = ['Active', 'Learning', 'Mastered'] as const;
+  const fallbackProgress = [84, 92, 100];
+  const highlightedAlgorithms = algorithms.filter((algorithm) => algorithm.dashboard);
+  const dashboardSource = highlightedAlgorithms.length > 0
+    ? highlightedAlgorithms
+    : algorithms.slice(0, 3);
+
+  const dashboardAlgorithms = dashboardSource.map((algorithm, index) => ({
+    icon: algorithm.icon,
+    name: algorithm.shortTitle,
+    description: algorithm.tagline,
+    complexity: algorithm.complexity,
+    status: algorithm.dashboard?.status ?? fallbackStatuses[index % fallbackStatuses.length],
+    progress: algorithm.dashboard?.progress ?? fallbackProgress[index % fallbackProgress.length],
+    color: algorithm.color,
+  }));
 
   const stats = [
-    { label: 'Algorithms', value: '3', icon: Code2 },
-    { label: 'Visualizations', value: '12+', icon: BarChart3 },
-    { label: 'Code Examples', value: '9', icon: Play },
-    { label: 'Learning Paths', value: '∞', icon: Star }
+    { label: 'Algorithms', value: String(algorithmStats.algorithmCount), icon: Code2 },
+    { label: 'Visualizations', value: String(algorithmStats.visualizationCount), icon: BarChart3 },
+    { label: 'Code Examples', value: String(algorithmStats.codeExampleCount), icon: Play },
+    { label: 'Learning Paths', value: String(algorithmStats.learningPathCount), icon: Star }
   ];
 
   return (
@@ -105,7 +90,7 @@ export const AlgorithmDashboard: React.FC = () => {
 
       {/* Algorithm Cards */}
       <div className="grid md:grid-cols-3 gap-4">
-        {algorithms.map((alg, index) => (
+        {dashboardAlgorithms.map((alg, index) => (
           <motion.div
             key={alg.name}
             initial={{ opacity: 0, scale: 0.9 }}
