@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import AuthScreen from '../pages/AuthScreen';
 
 const AuthGate: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, isConfigured } = useAuth();
 
   if (isLoading) {
     return (
@@ -14,6 +14,10 @@ const AuthGate: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         </div>
       </div>
     );
+  }
+
+  if (!isConfigured) {
+    return <>{children}</>;
   }
 
   if (!user) {
