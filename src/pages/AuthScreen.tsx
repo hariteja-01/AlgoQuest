@@ -36,7 +36,7 @@ const AuthScreen: React.FC = () => {
       return;
     }
 
-    toast.success(mode === 'signin' ? 'Signed in successfully!' : 'Account created. Check your email if confirmation is required.');
+    toast.success(mode === 'signin' ? 'Signed in successfully!' : 'Account created successfully!');
   };
 
   if (!isConfigured) {
